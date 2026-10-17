@@ -1,0 +1,43 @@
+{
+    "version": "1.8.0",
+    "description": "Steam 本地入库图形界面：搜索入库、清单/密钥源级联、DLC 全解锁、联机启动、免 Steam 启动、D 加密模式切换。",
+    "homepage": "https://github.com/hazjy/OSTGUI",
+    "license": "Unknown",
+    "url": "https://github.com/hazjy/OSTGUI/releases/download/v1.8.0/OSTGUI-v1.8.0.zip",
+    "hash": "",
+    "extract_dir": "",
+    "bin": "OSTGUI.exe",
+    "shortcuts": [
+        [
+            "OSTGUI.exe",
+            "OSTGUI"
+        ]
+    ],
+    "persist": [
+        "LOCALAPPDATA\\OSTGUI"
+    ],
+    "post_install": [
+        "$localAppData = [Environment]::GetFolderPath('LocalApplicationData')",
+        "$sourceDir = Join-Path $localAppData 'OSTGUI'",
+        "$persistDir = \"$persist_dir\\LOCALAPPDATA\\OSTGUI\"",
+        "if ((Test-Path $sourceDir) -and !(Test-Path $persistDir)) {",
+        "    New-Item -ItemType Directory -Path $persistDir -Force | Out-Null",
+        "    Copy-Item -Path \"$sourceDir\\*\" -Destination $persistDir -Recurse -Force",
+        "    Remove-Item -Path $sourceDir -Recurse -Force",
+        "}",
+        "if (!(Test-Path $sourceDir)) {",
+        "    New-Item -ItemType Junction -Path $sourceDir -Target $persistDir | Out-Null",
+        "}"
+    ],
+    "pre_uninstall": [
+        "$localAppData = [Environment]::GetFolderPath('LocalApplicationData')",
+        "$sourceDir = Join-Path $localAppData 'OSTGUI'",
+        "if ((Get-Item $sourceDir -ErrorAction SilentlyContinue).LinkType -eq 'Junction') {",
+        "    Remove-Item -Path $sourceDir -Force",
+        "}"
+    ],
+    "checkver": "github",
+    "autoupdate": {
+        "url": "https://github.com/hazjy/OSTGUI/releases/download/v$version/OSTGUI-v$version.zip"
+    }
+}
