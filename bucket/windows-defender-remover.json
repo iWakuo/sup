@@ -6,11 +6,24 @@
     "url": "https://github.com/ionuttbara/windows-defender-remover/releases/download/release13-rev1/Defender.Remover.13.exe",
     "hash": "64EA442286170F73A9083B52DED50A2EDF8B0F3708FDCBC8B5855C4183B2CE2F",
     "bin": "Defender.Remover.13.exe",
+    "shortcuts": [
+        [
+            "Defender.Remover.13.exe",
+            "Windows Defender Remover"
+        ]
+    ],
     "checkver": {
         "url": "https://github.com/ionuttbara/windows-defender-remover/releases",
         "regex": "release(?<version>(?<major>[\\d.]+)(?:-rev(?<rev>\\d+))?)"
     },
     "autoupdate": {
-        "url": "https://github.com/ionuttbara/windows-defender-remover/releases/download/release$version/Defender.Remover.$matchMajor.exe"
+        "url": "https://github.com/ionuttbara/windows-defender-remover/releases/download/release$version/Defender.Remover.$matchMajor.exe",
+        "bin": "Defender.Remover.$matchMajor.exe",
+        "shortcuts": [
+            [
+                "Defender.Remover.$matchMajor.exe",
+                "windows-defender-remover"
+            ]
+        ]
     }
 }
