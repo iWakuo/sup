@@ -1,0 +1,33 @@
+{
+    "version": "10.1.0",
+    "description": "AMD ROCm (Radeon Open Compute) runtime and tools for Windows (gfx1150) AMD Ryzen AI 9 HX 370 (Radeon 890M).",
+    "homepage": "https://rocm.docs.amd.com/",
+    "license": "Unknown",
+    "url": "https://stable.repo.amd.com/rocm/core/tarball/therock-dist-windows-gfx1150-10.1.0.tar.gz",
+    "extract_dir": "therock-dist-windows-gfx1150-$version",
+    "env_add_path": [
+        "bin",
+        "lib\\llvm\\bin"
+    ],
+    "env_set": {
+        "HIP_DEVICE_LIB_PATH": "$dir\\lib\\llvm\\amdgcn\\bitcode",
+        "HIP_PATH": "$dir",
+        "HIP_PLATFORM": "amd",
+        "LLVM_PATH": "$dir\\lib\\llvm"
+    },
+    "post_uninstall": [
+        "$vars = @('HIP_DEVICE_LIB_PATH', 'HIP_PATH', 'HIP_PLATFORM', 'LLVM_PATH')",
+        "foreach ($name in $vars) { if ([Environment]::GetEnvironmentVariable($name, 'User')) { [Environment]::SetEnvironmentVariable($name, $null, 'User') } }",
+        "$remove = @(\"$dir\\bin\", \"$dir\\lib\\llvm\\bin\") | ForEach-Object { $_.TrimEnd('\\') }",
+        "$userPath = [Environment]::GetEnvironmentVariable('Path', 'User')",
+        "if ($userPath) { $newPath = ($userPath -split ';' | Where-Object { $p = $_.TrimEnd('\\'); $p -and ($remove -notcontains $p) }) -join ';'; [Environment]::SetEnvironmentVariable('Path', $newPath, 'User') }"
+    ],
+    "checkver": {
+        "url": "https://stable.repo.amd.com/rocm/core/tarball/",
+        "regex": "therock-dist-windows-gfx1150-([\\d.]+)\\.tar\\.gz"
+    },
+    "autoupdate": {
+        "url": "https://stable.repo.amd.com/rocm/core/tarball/therock-dist-windows-gfx1150-$version.tar.gz",
+        "extract_dir": "therock-dist-windows-gfx1150-$version"
+    }
+}
