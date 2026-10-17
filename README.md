@@ -30,8 +30,8 @@ Template bucket for [Scoop](https://scoop.sh), the Windows command-line installe
 After manifests have been committed and pushed, run the following:
 
 ```pwsh
-scoop bucket add erqi https://github.com/iWakuo/erqi
-scoop install erqi/Win11EasyConfig
+scoop bucket add sup https://github.com/iWakuo/erqi
+scoop install sup/Win11EasyConfig
 ```
 
 ## How do I contribute new manifests?
