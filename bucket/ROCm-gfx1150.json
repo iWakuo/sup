@@ -15,6 +15,17 @@
         "HIP_PLATFORM": "amd",
         "LLVM_PATH": "$dir\\lib\\llvm"
     },
+    "notes": [
+        "ROCm 已安装完成。",
+        "请打开一个新的终端窗口（或重新登录），使 PATH 和环境变量生效，然后运行以下命令验证安装：",
+        "",
+        "    hipinfo",
+        "",
+        "hipinfo 会列出检测到的 AMD GPU，并确认 ROCm 运行时和驱动已正确加载。",
+        "如果提示找不到 hipinfo，请检查 PATH 中是否包含以下目录：",
+        "    $dir\\bin",
+        "    $dir\\lib\\llvm\\bin"
+    ],
     "post_uninstall": [
         "$vars = @('HIP_DEVICE_LIB_PATH', 'HIP_PATH', 'HIP_PLATFORM', 'LLVM_PATH')",
         "foreach ($name in $vars) { if ([Environment]::GetEnvironmentVariable($name, 'User')) { [Environment]::SetEnvironmentVariable($name, $null, 'User') } }",
