@@ -5,7 +5,7 @@
 ## 安装
 
 ```pwsh
-scoop bucket add sup https://github.com/iWakuo/erqi
+scoop bucket add sup https://github.com/iWakuo/sup
 scoop install sup/OSTGUI
 ```
 
