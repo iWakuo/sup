@@ -1,0 +1,16 @@
+{
+    "version": "13-rev1",
+    "description": "A tool to remove Windows Defender in Windows 8.x, 10 and 11.",
+    "homepage": "https://github.com/ionuttbara/windows-defender-remover",
+    "license": "Unknown",
+    "url": "https://github.com/ionuttbara/windows-defender-remover/releases/download/release13-rev1/Defender.Remover.13.exe",
+    "hash": "64EA442286170F73A9083B52DED50A2EDF8B0F3708FDCBC8B5855C4183B2CE2F",
+    "bin": "Defender.Remover.13.exe",
+    "checkver": {
+        "url": "https://github.com/ionuttbara/windows-defender-remover/releases",
+        "regex": "release(?<version>(?<major>[\\d.]+)(?:-rev(?<rev>\\d+))?)"
+    },
+    "autoupdate": {
+        "url": "https://github.com/ionuttbara/windows-defender-remover/releases/download/release$version/Defender.Remover.$matchMajor.exe"
+    }
+}
