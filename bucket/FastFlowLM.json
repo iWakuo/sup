@@ -11,16 +11,29 @@
     },
     "bin": "flm.exe",
     "pre_install": [
-        "Get-ChildItem \"$dir\" \"fastflowlm-windows-*\" -Directory | Get-ChildItem | Move-Item -Destination \"$dir\\\"",
-        "if (Test-Path \"$env:USERPROFILE\\.flm\" -PathType Container) {",
-        "    Get-ChildItem \"$env:USERPROFILE\\.flm\" -Force | Move-Item -Destination \"$persist_dir\\USERPROFILE\" -Force",
-        "    Remove-Item \"$env:USERPROFILE\\.flm\" -Force -Recurse",
-        "}"
+        "$sub = Get-ChildItem -LiteralPath $dir -Directory -Filter 'fastflowlm-windows-*' -ErrorAction SilentlyContinue | Select-Object -First 1",
+        "if ($sub) { Get-ChildItem -LiteralPath $sub.FullName -Force | Move-Item -Destination $dir -Force; Remove-Item -LiteralPath $sub.FullName -Recurse -Force }"
     ],
     "post_install": [
-        "New-Item -ItemType Junction -Path \"$env:USERPROFILE\\.flm\" -Target \"$persist_dir\\USERPROFILE\" -Force | Out-Null"
+        "$flm = Join-Path $env:USERPROFILE '.flm'",
+        "$persist = Join-Path $persist_dir 'USERPROFILE'",
+        "if (-not (Test-Path -LiteralPath $persist)) { New-Item -ItemType Directory -Path $persist -Force | Out-Null }",
+        "if (Test-Path -LiteralPath $flm) {",
+        "    $item = Get-Item -LiteralPath $flm -Force",
+        "    if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) {",
+        "        Remove-Item -LiteralPath $flm -Force -Recurse",
+        "    } else {",
+        "        Get-ChildItem -LiteralPath $flm -Force | ForEach-Object {",
+        "            $dest = Join-Path $persist $_.Name",
+        "            if (-not (Test-Path -LiteralPath $dest)) { Move-Item -LiteralPath $_.FullName -Destination $persist -Force }",
+        "        }",
+        "        $left = @(Get-ChildItem -LiteralPath $flm -Force)",
+        "        if ($left.Count -eq 0) { Remove-Item -LiteralPath $flm -Force -Recurse } else { throw \"Cannot empty $flm; merge remaining files into $persist manually.\" }",
+        "    }",
+        "}",
+        "New-Item -ItemType Junction -Path $flm -Target $persist | Out-Null"
     ],
-    "pre_uninstall": "if (Test-Path \"$env:USERPROFILE\\.flm\") { Remove-Item \"$env:USERPROFILE\\.flm\" -Force -Recurse -ErrorAction SilentlyContinue }",
+    "pre_uninstall": "if (Test-Path -LiteralPath \"$env:USERPROFILE\\.flm\") { Remove-Item -LiteralPath \"$env:USERPROFILE\\.flm\" -Force -Recurse -ErrorAction SilentlyContinue }",
     "persist": "USERPROFILE",
     "checkver": {
         "github": "https://github.com/FastFlowLM/FastFlowLM"
