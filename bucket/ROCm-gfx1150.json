@@ -4,7 +4,25 @@
     "homepage": "https://rocm.docs.amd.com/",
     "license": "Unknown",
     "url": "https://stable.repo.amd.com/rocm/core/tarball/therock-dist-windows-gfx1150-10.1.0.tar.gz",
-    "extract_dir": "therock-dist-windows-gfx1150-$version",
+    "hash": "b58d79a319b1267940c8b6397b3d6d714698ed8c74e1f61175ae247a3c2abbc8",
+    "installer": {
+        "script": [
+            "if (-not $dir -or $dir -notmatch '^[A-Za-z]:\\\\') { throw \"Refusing to install: $dir is not an absolute path.\" }",
+            "if ($dir -match '^[A-Za-z]:\\\\?$') { throw \"Refusing to install: $dir is a drive root.\" }",
+            "$tar = Get-ChildItem -LiteralPath $dir -Filter '*.tar' -File -ErrorAction SilentlyContinue | Select-Object -First 1",
+            "if (-not $tar) { throw 'No .tar file found in installation directory.' }",
+            "$tmp = Join-Path $dir '_rocm_extract_tmp'",
+            "if (Test-Path -LiteralPath $tmp) { Remove-Item -LiteralPath $tmp -Recurse -Force }",
+            "Expand-7zipArchive -Path $tar.FullName -DestinationPath $tmp -Removal",
+            "$inner = Get-ChildItem -LiteralPath $tmp -Directory | Select-Object -First 1",
+            "if (-not $inner) { throw 'No inner directory found after extracting .tar.' }",
+            "if ($inner.FullName -match '^[A-Za-z]:\\\\?$') { throw 'Refusing to move from a drive root.' }",
+            "$src = Join-Path $inner.FullName '*'",
+            "if (-not (Resolve-Path -LiteralPath $src -ErrorAction SilentlyContinue)) { throw 'Source path for Move-Item does not exist.' }",
+            "Move-Item -LiteralPath $src -Destination $dir -Force",
+            "Remove-Item -LiteralPath $tmp -Recurse -Force"
+        ]
+    },
     "env_add_path": [
         "bin",
         "lib\\llvm\\bin"
@@ -27,6 +45,7 @@
         "    $dir\\lib\\llvm\\bin"
     ],
     "post_uninstall": [
+        "if (-not $dir -or $dir -match '^[A-Za-z]:\\\\?$') { return }",
         "$vars = @('HIP_DEVICE_LIB_PATH', 'HIP_PATH', 'HIP_PLATFORM', 'LLVM_PATH')",
         "foreach ($name in $vars) { if ([Environment]::GetEnvironmentVariable($name, 'User')) { [Environment]::SetEnvironmentVariable($name, $null, 'User') } }",
         "$remove = @(\"$dir\\bin\", \"$dir\\lib\\llvm\\bin\") | ForEach-Object { $_.TrimEnd('\\') }",
@@ -38,7 +57,6 @@
         "regex": "therock-dist-windows-gfx1150-([\\d.]+)\\.tar\\.gz"
     },
     "autoupdate": {
-        "url": "https://stable.repo.amd.com/rocm/core/tarball/therock-dist-windows-gfx1150-$version.tar.gz",
-        "extract_dir": "therock-dist-windows-gfx1150-$version"
+        "url": "https://stable.repo.amd.com/rocm/core/tarball/therock-dist-windows-gfx1150-$version.tar.gz"
     }
 }
