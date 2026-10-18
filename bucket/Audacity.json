@@ -16,7 +16,11 @@
             "hash": "bafa562f9fc3960eae50ac64b656360b5bd2824af3396ed0809551a1f8eb716e"
         }
     },
-    "pre_install": "Get-ChildItem \"$dir\\Audacity-*\" -Directory | ForEach-Object { movedir $_.FullName $dir }",
+    "pre_install": [
+        "Get-ChildItem \"$dir\\Audacity-*\" -Directory | ForEach-Object { movedir $_.FullName $dir }",
+        "if (!(Test-Path \"$persist_dir\")) { New-Item -ItemType Directory -Path \"$persist_dir\" -Force | Out-Null }",
+        "if (!(Test-Path \"$env:APPDATA\\Audacity\")) { New-Item -ItemType Directory -Path \"$env:APPDATA\\Audacity\" -Force | Out-Null }"
+    ],
     "bin": [
         [
             "bin\\Audacity4.exe",
@@ -33,11 +37,16 @@
         [
             "bin\\Portable Settings",
             "Portable Settings"
-        ],
-        [
-            "$env:APPDATA\\Audacity",
-            "Audacity"
         ]
+    ],
+    "post_install": [
+        "$appdataPath = Join-Path $env:APPDATA 'Audacity'",
+        "if (Test-Path $appdataPath) {",
+        "    $item = Get-Item $appdataPath -Force",
+        "    if ($item.LinkType -eq 'Junction') { Remove-Item $appdataPath -Force }",
+        "    elseif ((Get-ChildItem $appdataPath -Force -ErrorAction SilentlyContinue | Measure-Object).Count -eq 0) { Remove-Item $appdataPath -Force -Recurse }",
+        "}",
+        "if (!(Test-Path $appdataPath)) { New-Item -ItemType Junction -Path $appdataPath -Target $persist_dir -Force | Out-Null }"
     ],
     "checkver": {
         "github": "https://github.com/audacity/audacity",
