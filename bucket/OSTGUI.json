@@ -6,7 +6,7 @@
     "architecture": {
         "64bit": {
             "url": "https://github.com/hazjy/OSTGUI/releases/download/v1.8.1/OSTGUI-v1.8.1.zip",
-            "hash": ""
+            "hash": "d5af6de7d6705ad05c4157b178ac57e9bf0329156f8bb50ba1fe6c0e31453857"
         }
     },
     "extract_dir": "",
@@ -37,7 +37,7 @@
         "$localAppData = [Environment]::GetFolderPath('LocalApplicationData')",
         "$sourceDir = Join-Path $localAppData 'OSTGUI'",
         "if ((Get-Item $sourceDir -ErrorAction SilentlyContinue).LinkType -eq 'Junction') {",
-        "    Remove-Item -Path $sourceDir -Force",
+        "    Remove-Item -Path $sourceDir -Recurse -Force -Confirm:$false",
         "}"
     ],
     "checkver": "github",
