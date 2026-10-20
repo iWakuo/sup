@@ -34,12 +34,12 @@
         "}"
     ],
     "pre_uninstall": [
-        "$localAppData = [Environment]::GetFolderPath('LocalApplicationData')",
-        "$sourceDir = Join-Path $localAppData 'OSTGUI'",
-        "if ((Get-Item $sourceDir -ErrorAction SilentlyContinue).LinkType -eq 'Junction') {",
-        "    Remove-Item -Path $sourceDir -Recurse -Force -Confirm:$false",
-        "}"
-    ],
+    "$localAppData = [Environment]::GetFolderPath('LocalApplicationData')",
+    "$sourceDir = Join-Path $localAppData 'OSTGUI'",
+    "if ((Test-Path $sourceDir) -and ((Get-Item $sourceDir -ErrorAction SilentlyContinue).LinkType -eq 'Junction')) {",
+    "    cmd /c rmdir \"$sourceDir\"",
+    "}"
+],
     "checkver": "github",
     "autoupdate": {
         "architecture": {
