@@ -1,0 +1,65 @@
+{
+    "version": "0.1.7",
+    "description": "ELYTerminal",
+    "homepage": "https://git.zacharyzhang.com/ZacharyZhang-NY/ELYTerminal",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://git.zacharyzhang.com/ZacharyZhang-NY/ELYTerminal/releases/download/v0.1.7/ELYTerminal-0.1.7-windows-x86_64.zip",
+            "hash": "127b7f1b1cb9d12d5d7cb33a79625fcf4063c6f43429e887a95b0e82547c13ca"
+        }
+    },
+    "bin": "elyterminal.exe",
+    "shortcuts": [
+        ["elyterminal.exe", "ELYTerminal"]
+    ],
+    "post_install": [
+        "if (Test-Path $persist_dir) { $roaming = Join-Path $persist_dir 'Roaming'; if (!(Test-Path $roaming)) { New-Item -ItemType Directory -Path $roaming -Force | Out-Null }; Get-ChildItem $persist_dir -Force | Where-Object { $_.Name -notin @('Roaming','Local') } | ForEach-Object { $dest = Join-Path $roaming $_.Name; if (!(Test-Path $dest)) { try { Move-Item $_.FullName $dest -Force -ErrorAction Stop } catch {} } } }",
+        "$pairs = @(@{ App = (Join-Path $env:APPDATA 'ELYTerminal'); Persist = (Join-Path $persist_dir 'Roaming') }, @{ App = (Join-Path $env:LOCALAPPDATA 'ELYTerminal'); Persist = (Join-Path $persist_dir 'Local') })",
+        "foreach ($p in $pairs) {",
+        "$appDataDir = $p.App",
+        "$persistDir = $p.Persist",
+        "if (!(Test-Path $persistDir)) { New-Item -ItemType Directory -Path $persistDir -Force | Out-Null }",
+        "if (Test-Path $appDataDir) {",
+        "$item = Get-Item $appDataDir -Force",
+        "if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { cmd /c rmdir \"$appDataDir\" }",
+        "else {",
+        "$failed = @()",
+        "Get-ChildItem $appDataDir -Force | ForEach-Object {",
+        "$src = $_.FullName",
+        "$target = Join-Path $persistDir $_.Name",
+        "try {",
+        "if (Test-Path $target) { if ((Get-Item $src -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) { cmd /c rmdir \"$src\" } else { Remove-Item $src -Force -Recurse -ErrorAction Stop } }",
+        "else { Move-Item $src $target -Force -ErrorAction Stop }",
+        "} catch { $failed += $src }",
+        "}",
+        "if ($failed.Count -gt 0) { Write-Host \"Warning: could not migrate $($failed -join ', '); leaving $appDataDir in place.\" -ForegroundColor Yellow }",
+        "else { cmd /c rmdir \"$appDataDir\"; if (Test-Path $appDataDir) { Write-Host \"Warning: could not remove $appDataDir; skipping junction.\" -ForegroundColor Yellow } else { New-Item -ItemType Junction -Path $appDataDir -Target $persistDir -Force | Out-Null } }",
+        "}",
+        "} else { New-Item -ItemType Junction -Path $appDataDir -Target $persistDir -Force | Out-Null }",
+        "}"
+    ],
+    "pre_uninstall": [
+        "$pairs = @(@{ App = (Join-Path $env:APPDATA 'ELYTerminal') }, @{ App = (Join-Path $env:LOCALAPPDATA 'ELYTerminal') })",
+        "foreach ($p in $pairs) { if (Test-Path $p.App) { $item = Get-Item $p.App -Force; if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { cmd /c rmdir \"$($p.App)\" } } }"
+    ],
+    "checkver": {
+        "url": "https://git.zacharyzhang.com/api/v1/repos/ZacharyZhang-NY/ELYTerminal/releases/latest",
+        "jsonpath": "$.tag_name",
+        "regex": "v?([\\d.]+)"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://git.zacharyzhang.com/ZacharyZhang-NY/ELYTerminal/releases/download/v$version/ELYTerminal-$version-windows-x86_64.zip"
+            }
+        }
+    },
+    "notes": [
+        "ELYTerminal is unsigned; if SmartScreen blocks it, choose More info, then Run anyway.",
+        "Persisted locations:",
+        "  %APPDATA%\\ELYTerminal      -> D:\\Scoop\\persist\\ELYTerminal\\Roaming",
+        "  %LOCALAPPDATA%\\ELYTerminal -> D:\\Scoop\\persist\\ELYTerminal\\Local",
+        "Close ELYTerminal before uninstalling or upgrading to avoid file locks."
+    ]
+}
