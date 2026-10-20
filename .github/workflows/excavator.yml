@@ -1,17 +1,22 @@
-on:
-  workflow_dispatch:
-  schedule:
-    # run every 4 hours
-    - cron: '20 */4 * * *'
 name: Excavator
+
+on:
+  schedule:
+    - cron: '20 */12 * * *' # 每12小时运行一次（UTC 00:20 和 12:20）
+  workflow_dispatch: # 允许手动触发
+
+permissions:
+  contents: write
+
 jobs:
   excavate:
     name: Excavate
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@main
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Excavate
         uses: ScoopInstaller/GithubActions@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SKIP_UPDATED: 1
+          SKIP_UPDATED: 1 # 跳过已是最新版本的清单，减少无效运行
