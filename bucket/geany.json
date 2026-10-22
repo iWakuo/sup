@@ -1,0 +1,50 @@
+{
+    "version": "2.1",
+    "description": "A powerful, stable and lightweight programmer's text editor that provides tons of useful features without bogging down your workflow.",
+    "homepage": "https://www.geany.org/",
+    "license": "GPL-2.0-or-later",
+    "url": "https://download.geany.org/geany-2.1_setup.exe#/dl.7z",
+    "hash": "50c7835b31bc736d0b5e5f894aa8ec08a95185873fb64d29a95727d2859107d8",
+    "pre_install": "Remove-Item \"$dir\\`$*\", \"$dir\\uninst*\" -Recurse",
+    "installer": {
+        "script": [
+            "if (Test-Path -Path $(appdir geany-plugins $global)) {",
+            "  Get-ChildItem \"$(appdir geany-plugins $global)\\current\" -Exclude 'scoop-install.json', 'scoop-manifest.json' |",
+            "  Copy-Item -Destination $dir -Recurse -Force",
+            "}"
+        ]
+    },
+    "post_install": [
+        "$configDir = Join-Path $env:APPDATA 'geany'",
+        "$targetDir = $persist_dir",
+        "if (!(Test-Path -Path $targetDir)) { New-Item -ItemType Directory -Path $targetDir -Force | Out-Null }",
+        "$existing = Get-Item $configDir -Force -ErrorAction SilentlyContinue",
+        "if ($existing) {",
+        "    if ($existing.Attributes -band [IO.FileAttributes]::ReparsePoint) {",
+        "        [System.IO.Directory]::Delete($configDir)",
+        "    } else {",
+        "        Get-ChildItem $configDir -Force | Copy-Item -Destination $targetDir -Recurse -Force -ErrorAction SilentlyContinue",
+        "        Remove-Item $configDir -Recurse -Force",
+        "    }",
+        "}",
+        "New-Item -ItemType Junction -Path $configDir -Target $targetDir | Out-Null"
+    ],
+    "uninstaller": {
+        "script": [
+            "$configDir = Join-Path $env:APPDATA 'geany'",
+            "$item = Get-Item $configDir -Force -ErrorAction SilentlyContinue",
+            "if ($item -and ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) { [System.IO.Directory]::Delete($configDir) }"
+        ]
+    },
+    "bin": "bin\\geany.exe",
+    "shortcuts": [
+        ["bin\\geany.exe", "Geany"]
+    ],
+    "checkver": {
+        "url": "https://download.geany.org/",
+        "regex": "LATEST-IS-([\\d.]+)"
+    },
+    "autoupdate": {
+        "url": "https://download.geany.org/geany-$version_setup.exe#/dl.7z"
+    }
+}
