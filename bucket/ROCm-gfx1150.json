@@ -1,10 +1,10 @@
 {
-    "version": "10.1.0",
+    "version": "10.0.0",
     "description": "AMD ROCm (Radeon Open Compute) runtime and tools for Windows (gfx1150) AMD Ryzen AI 9 HX 370 (Radeon 890M).",
     "homepage": "https://rocm.docs.amd.com/",
     "license": "Unknown",
-    "url": "https://stable.repo.amd.com/rocm/core/tarball/therock-dist-windows-gfx1150-10.1.0.tar.gz",
-    "hash": "b58d79a319b1267940c8b6397b3d6d714698ed8c74e1f61175ae247a3c2abbc8",
+    "url": "https://stable.repo.amd.com/rocm/core/tarball/therock-dist-windows-gfx1150-10.0.0.tar.gz",
+    "hash": "6bd34e8c7214a8b63f24f66560a0885a35c46b6cf14ef127a7cdc5c62a629a59",
     "installer": {
         "script": [
             "if (-not $dir -or $dir -notmatch '^[A-Za-z]:\\\\') { throw \"Refusing to install: $dir is not an absolute path.\" }",
