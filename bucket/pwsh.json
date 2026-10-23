@@ -70,7 +70,7 @@
         "        }",
         "    }",
         "}",
-        "Get-AppxPackage -PackageFamilyName \"Microsoft.PowerShell_8wekyb3d8bbwe\" | Remove-AppxPackage -ErrorAction SilentlyContinue"
+        "Get-AppxPackage -Name \"Microsoft.PowerShell\" | Remove-AppxPackage -ErrorAction SilentlyContinue"
     ],
     "checkver": {
         "github": "https://github.com/PowerShell/PowerShell"
