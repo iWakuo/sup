@@ -1,18 +1,18 @@
 {
-    "version": "7.6.8",
+    "version": "7.6.9",
     "description": "Cross-platform automation and configuration tool/framework, known as PowerShell Core.",
     "homepage": "https://microsoft.com/PowerShell",
     "license": "MIT",
     "extract_to": "Deploy",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.8/PowerShell-7.6.8.msixbundle#/dl.7z",
-            "hash": "a77ef80d069c342739211904b7917769c190dd0c9ccbe492f21d637f318b5e96",
+            "url": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.9/PowerShell-7.6.9.msixbundle#/dl.7z",
+            "hash": "da75c8aa23edda52e888fb586a46b923ab37a7c243719c2e8914b00130c5917a",
             "pre_install": "Get-ChildItem \"$dir\\Deploy\\*x64*.msix\" | ForEach-Object { Expand-7zipArchive $_.FullName $dir }"
         },
         "arm64": {
-            "url": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.8/PowerShell-7.6.8.msixbundle#/dl.7z",
-            "hash": "a77ef80d069c342739211904b7917769c190dd0c9ccbe492f21d637f318b5e96",
+            "url": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.9/PowerShell-7.6.9.msixbundle#/dl.7z",
+            "hash": "da75c8aa23edda52e888fb586a46b923ab37a7c243719c2e8914b00130c5917a",
             "pre_install": "Get-ChildItem \"$dir\\Deploy\\*arm64*.msix\" | ForEach-Object { Expand-7zipArchive $_.FullName $dir }"
         }
     },
