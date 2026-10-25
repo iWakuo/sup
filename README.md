@@ -18,7 +18,7 @@
 | **Geany** | 强大、稳定、轻量的程序员文本编辑器 | https://www.geany.org/ | GPL-2.0-or-later |
 | **PowerShell Core** | 跨平台自动化与配置工具/框架（PowerShell Core） | https://microsoft.com/PowerShell | MIT |
 | **Zen Browser Portable** | Zen Browser 便携版，基于 Firefox，数据随目录携带，不写注册表。| https://github.com/Piracola/Zen-Portable | MIT |
-| **...** | ... | ... |
+| **...** | ... | ... | ... |
 
 ## 安装
 
