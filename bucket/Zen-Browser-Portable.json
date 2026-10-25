@@ -30,8 +30,8 @@
             }
         },
         "hash": {
-            "url": "https://github.com/Piracola/Zen-Portable/releases/tag/$version",
-            "regex": "产物 SHA-256\\s*\\|\\s*([a-f0-9]{64})"
+            "url": "$url.sha256",
+            "regex": "^([a-fA-F0-9]{64})\\s+Zen_$version\\.7z$"
         }
     }
 }
