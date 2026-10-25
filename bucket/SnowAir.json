@@ -1,0 +1,69 @@
+{
+    "version": "0.1.9",
+    "description": "SnowAir 轻雪是一套轻量的 Windows 截图与标注工具，覆盖截图、长截图、录屏、OCR 识别、标注与贴图。",
+    "homepage": "https://github.com/CM-idea/SnowAir",
+    "license": "Apache-2.0",
+    "notes": [
+        "配置目录已通过目录联接（Junction）重定向：",
+        "  %AppData%\\SnowAir  ->  Scoop persist 目录（通常为 D:\\Scoop\\persist\\<app>）",
+        "实际数据保存在 persist 目录中，Scoop 升级/重装不会删除。",
+        "卸载时会移除 Junction，但 persist 数据保留。",
+        "persist 目录名与 manifest 文件名一致：若希望为 D:\\Scoop\\persist\\SnowAir，请将本文件命名为 SnowAir.json。",
+        "注意：不要在 SnowAir-Lite.exe 同目录放置 config.json，否则会切换到便携模式。",
+        "安装后会在开始菜单创建「SnowAir 轻雪」快捷方式。"
+    ],
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/CM-idea/SnowAir/releases/download/v0.1.9-lite/SnowAir-Lite.exe"
+        }
+    },
+    "bin": [
+        [
+            "SnowAir-Lite.exe",
+            "snowair"
+        ]
+    ],
+    "shortcuts": [
+        [
+            "SnowAir-Lite.exe",
+            "SnowAir"
+        ]
+    ],
+    "post_install": [
+        "$persistDir = $persist_dir",
+        "$appDataDir = Join-Path $env:APPDATA 'SnowAir'",
+        "if (!(Test-Path $persistDir)) { New-Item -ItemType Directory -Path $persistDir -Force | Out-Null }",
+        "$needCreate = $true",
+        "if (Test-Path $appDataDir) {",
+        "    $item = Get-Item $appDataDir -Force",
+        "    if ($item.LinkType -eq 'Junction') {",
+        "        if ($item.Target -eq $persistDir) { $needCreate = $false }",
+        "        else { [System.IO.Directory]::Delete($appDataDir) }",
+        "    } else {",
+        "        $persistEmpty = (Get-ChildItem $persistDir -Force | Measure-Object).Count -eq 0",
+        "        if ($persistEmpty) { Move-Item -Path \"$appDataDir\\*\" -Destination $persistDir -Force -ErrorAction SilentlyContinue }",
+        "        else { Copy-Item -Path \"$appDataDir\\*\" -Destination $persistDir -Recurse -Force -ErrorAction SilentlyContinue }",
+        "        [System.IO.Directory]::Delete($appDataDir, $true)",
+        "    }",
+        "}",
+        "if ($needCreate) { New-Item -ItemType Junction -Path $appDataDir -Target $persistDir | Out-Null }"
+    ],
+    "pre_uninstall": [
+        "$appDataDir = Join-Path $env:APPDATA 'SnowAir'",
+        "if (Test-Path $appDataDir) {",
+        "    $item = Get-Item $appDataDir -Force",
+        "    if ($item.LinkType -eq 'Junction') { [System.IO.Directory]::Delete($appDataDir) }",
+        "}"
+    ],
+    "checkver": {
+        "github": "https://github.com/CM-idea/SnowAir",
+        "regex": "v([\\d.]+-lite)"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/CM-idea/SnowAir/releases/download/v$version/SnowAir-Lite.exe"
+            }
+        }
+    }
+}
