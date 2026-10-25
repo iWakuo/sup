@@ -1,0 +1,61 @@
+{
+    "version": "1.2.1",
+    "description": "Steam 解锁工具内核（OpenSteamTool 定制发行版），用于解锁并下载未入库的游戏/DLC。",
+    "homepage": "https://github.com/hazjy/ZSteamTool",
+    "license": "GPL-3.0",
+    "url": "https://github.com/hazjy/ZSteamTool/releases/download/v1.2.1/ZSteamTool-v1.2.1.zip",
+    "post_install": [
+        "$ErrorActionPreference = 'Continue'",
+        "$steamPath = $null",
+        "$reg = (Get-ItemProperty -Path 'HKCU:\\Software\\Valve\\Steam' -Name 'SteamPath' -ErrorAction SilentlyContinue).SteamPath",
+        "if ($reg -and (Test-Path (Join-Path $reg 'Steam.exe'))) { $steamPath = $reg }",
+        "if (-not $steamPath) {",
+        "    $scoopSteam = Join-Path $env:SCOOP 'apps\\steam\\current'",
+        "    if (Test-Path (Join-Path $scoopSteam 'Steam.exe')) { $steamPath = $scoopSteam }",
+        "}",
+        "if (-not $steamPath) {",
+        "    foreach ($p in @(\"${env:ProgramFiles(x86)}\\Steam\", \"$env:ProgramFiles\\Steam\")) {",
+        "        if (Test-Path (Join-Path $p 'Steam.exe')) { $steamPath = $p; break }",
+        "    }",
+        "}",
+        "if (-not $steamPath) {",
+        "    Write-Host '未找到 Steam 安装目录，请手动将 Release 下三个 DLL 和 opensteamtool.toml 复制到 Steam 根目录。' -ForegroundColor Yellow",
+        "} else {",
+        "    Write-Host \"检测到 Steam 目录: $steamPath\"",
+        "    if (Get-Process -Name steam -ErrorAction SilentlyContinue) {",
+        "        Write-Host '警告：Steam 正在运行，DLL 可能被占用。若复制失败，请关闭 Steam 后重试。' -ForegroundColor Yellow",
+        "    }",
+        "    foreach ($f in @('dwmapi.dll', 'OpenSteamTool.dll', 'xinput1_4.dll')) {",
+        "        $src = Join-Path $dir \"Release\\$f\"",
+        "        $dst = Join-Path $steamPath $f",
+        "        try { Copy-Item -Path $src -Destination $dst -Force -ErrorAction Stop; Write-Host \"已复制 $f\" }",
+        "        catch { Write-Host \"复制 $f 失败: $_\" -ForegroundColor Red }",
+        "    }",
+        "    $tomlDst = Join-Path $steamPath 'opensteamtool.toml'",
+        "    if (-not (Test-Path $tomlDst)) {",
+        "        Copy-Item -Path (Join-Path $dir 'opensteamtool.toml') -Destination $tomlDst -Force -ErrorAction SilentlyContinue",
+        "        Write-Host '已放置 opensteamtool.toml 配置模板。'",
+        "    } else {",
+        "        Write-Host '检测到已有 opensteamtool.toml，已跳过覆盖以保护你的配置。'",
+        "    }",
+        "}"
+    ],
+    "notes": [
+        "安装脚本已尝试自动定位 Steam 并复制 Release 下的三个 DLL 与 opensteamtool.toml。",
+        "若自动复制失败（如 Steam 正在运行或路径特殊），请手动将 Release 下三个 DLL 复制到 Steam 根目录（steam.exe 所在文件夹）。",
+        "已有 opensteamtool.toml 不会被覆盖；如需重置配置，请手动删除后重装。",
+        "覆盖前建议备份 Steam 根目录下的同名文件，复制完成后重启 Steam 生效。"
+    ],
+    "checkver": {
+        "url": "https://api.github.com/repos/hazjy/ZSteamTool/releases/latest",
+        "jsonpath": "$.tag_name",
+        "regex": "v([\\d.]+)"
+    },
+    "autoupdate": {
+        "url": "https://github.com/hazjy/ZSteamTool/releases/download/v$version/ZSteamTool-v$version.zip",
+        "hash": {
+            "url": "https://api.github.com/repos/hazjy/ZSteamTool/releases/tags/v$version",
+            "regex": "sha256:([a-f0-9]{64})"
+        }
+    }
+}
