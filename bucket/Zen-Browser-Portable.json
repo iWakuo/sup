@@ -6,15 +6,14 @@
     "architecture": {
         "64bit": {
             "url": "https://github.com/Piracola/Zen-Portable/releases/download/1.23.4b/Zen_1.23.4b.7z",
-            "hash": "1387eadcb7bc9203b402f2d3c9119b110f977eea20dcb0512a3fb02a59dfa492",
-            "extract_dir": "Zen_1.23.4b"
+            "hash": "1387eadcb7bc9203b402f2d3c9119b110f977eea20dcb0512a3fb02a59dfa492"
         }
     },
     "bin": [
-        ["zen\\zen.exe", "zen"]
+        ["Zen\\zen.exe", "zen"]
     ],
     "shortcuts": [
-        ["zen\\zen.exe", "Zen Browser"]
+        ["Zen\\zen.exe", "Zen Browser"]
     ],
     "persist": [
         "Profiles",
@@ -30,7 +29,7 @@
             }
         },
         "hash": {
-            "url": "$url.sha256",
+            "url": "https://github.com/Piracola/Zen-Portable/releases/download/$version/Zen_$version.7z.sha256",
             "regex": "^([a-fA-F0-9]{64})\\s+Zen_$version\\.7z$"
         }
     }
