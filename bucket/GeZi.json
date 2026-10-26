@@ -1,0 +1,26 @@
+{
+    "version": "2.8.7",
+    "description": "Windows 桌面端的夸克网盘下载器，支持免转存直链解析、多线程分片下载、边下边播等功能",
+    "homepage": "https://github.com/zeroyong/gezi-quark-downloader-main",
+    "license": "GPL-3.0-only",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/zeroyong/gezi-quark-downloader-main/releases/download/v2.8.7/GeZi-v2.8.7-win64.zip"
+        }
+    },
+    "bin": "GeZi.exe",
+    "shortcuts": [
+        [
+            "GeZi.exe",
+            "鸽子下载"
+        ]
+    ],
+    "checkver": "github",
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/zeroyong/gezi-quark-downloader-main/releases/download/v$version/GeZi-v$version-win64.zip"
+            }
+        }
+    }
+}
