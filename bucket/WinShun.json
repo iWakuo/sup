@@ -1,0 +1,67 @@
+{
+    "version": "0.15.0",
+    "description": "免费开源的 Windows 快速搜索启动器：拼音秒搜文件、Word/Excel/PDF 全文搜索、剪贴板历史、任务栏搜索框、插件与 MCP 服务器。Everything / Listary 替代品。",
+    "homepage": "https://github.com/LingCore/WinShun",
+    "license": "MIT",
+    "notes": [
+        "需要管理员权限才能启用键盘拦截、NTFS 索引等功能，首次运行请以管理员身份启动。",
+        "设置与索引固定存放在本仓库的 persist\\winshun 下：安装时会把 %APPDATA%\\WinShun 与 %LOCALAPPDATA%\\WinShun 改为指向它的目录联接（junction），因此数据不在 C 盘、重装系统后只要重新 scoop install 就能接回。",
+        "如果你的 %APPDATA%\\WinShun 或 %LOCALAPPDATA%\\WinShun 已经存在真实目录，脚本不会动它，会给出提示。"
+    ],
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/LingCore/WinShun/releases/download/v0.15.0/WinShun-0.15.0-x64-portable.zip",
+            "hash": "809fd03deca190bba22a63fb3416bbaa5f9a20c0aea8280cde4539e430322326"
+        }
+    },
+    "extract_dir": "WinShun",
+    "shortcuts": [
+        [
+            "WinShun.exe",
+            "WinShun"
+        ]
+    ],
+    "post_install": [
+        "$base = $persist_dir",
+        "$links = @(",
+        "    @{ Path = (Join-Path $env:APPDATA 'WinShun');      Target = (Join-Path $base 'Roaming') },",
+        "    @{ Path = (Join-Path $env:LOCALAPPDATA 'WinShun'); Target = (Join-Path $base 'Local')   }",
+        ")",
+        "foreach ($l in $links) {",
+        "    ensure $l.Target | Out-Null",
+        "    $existing = Get-Item -LiteralPath $l.Path -Force -ErrorAction SilentlyContinue",
+        "    if ($existing) {",
+        "        if ($existing.LinkType -eq 'Junction' -and @($existing.Target) -contains $l.Target) { continue }",
+        "        warn \"$($l.Path) already exists; left untouched. Move it to $($l.Target), delete it, then re-run 'scoop install winshun'.\"",
+        "        continue",
+        "    }",
+        "    try { New-Item -ItemType Junction -Path $l.Path -Target $l.Target -ErrorAction Stop | Out-Null }",
+        "    catch { warn \"could not link $($l.Path) to $($l.Target): $($_.Exception.Message)\" }",
+        "}"
+    ],
+    "pre_uninstall": [
+        "if ($cmd -eq 'uninstall') {",
+        "    $base = $persist_dir",
+        "    $targets = @((Join-Path $base 'Roaming'), (Join-Path $base 'Local'))",
+        "    foreach ($p in @((Join-Path $env:APPDATA 'WinShun'), (Join-Path $env:LOCALAPPDATA 'WinShun'))) {",
+        "        $i = Get-Item -LiteralPath $p -Force -ErrorAction SilentlyContinue",
+        "        if ($i -and $i.LinkType -eq 'Junction' -and (@($i.Target) | Where-Object { $targets -contains $_ })) {",
+        "            try { $i.Attributes = 'Directory'; Remove-Item -LiteralPath $p -Force -ErrorAction Stop } catch { }",
+        "        }",
+        "    }",
+        "}"
+    ],
+    "checkver": {
+        "github": "https://github.com/LingCore/WinShun"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/LingCore/WinShun/releases/download/v$version/WinShun-$version-x64-portable.zip"
+            }
+        },
+        "hash": {
+            "url": "$baseurl/SHA256SUMS.txt"
+        }
+    }
+}
