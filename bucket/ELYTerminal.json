@@ -1,17 +1,20 @@
 {
-    "version": "0.1.9",
+    "version": "0.2.0",
     "description": "ELYTerminal",
     "homepage": "https://github.com/ELY-Open-Source/ELYTerminal",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/ELY-Open-Source/ELYTerminal/releases/download/v0.1.9/ELYTerminal-0.1.9-windows-x86_64.zip",
-            "hash": "3724442d46c1dcb3a40956992d1a4f35ce1f284eff64917a9f627f2d9f306155"
+            "url": "https://github.com/ELY-Open-Source/ELYTerminal/releases/download/v0.2.0/ELYTerminal-0.2.0-windows-x86_64.zip",
+            "hash": "24edfc6ac0c902e97323844ebc5572dc23fa79c6a722bab2875f9577b778fabc"
         }
     },
     "bin": "elyterminal.exe",
     "shortcuts": [
-        ["elyterminal.exe", "ELYTerminal"]
+        [
+            "elyterminal.exe",
+            "ELYTerminal"
+        ]
     ],
     "post_install": [
         "if (Test-Path $persist_dir) { $roaming = Join-Path $persist_dir 'Roaming'; if (!(Test-Path $roaming)) { New-Item -ItemType Directory -Path $roaming -Force | Out-Null }; Get-ChildItem $persist_dir -Force | Where-Object { $_.Name -notin @('Roaming','Local') } | ForEach-Object { $dest = Join-Path $roaming $_.Name; if (!(Test-Path $dest)) { try { Move-Item $_.FullName $dest -Force -ErrorAction Stop } catch {} } } }",
