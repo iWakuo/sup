@@ -1,0 +1,74 @@
+{
+    "version": "0.1.12",
+    "description": "ElyShow: an offline-first presentation editor for PPTX and ODP files, powered by LibreOfficeKit and system media. Part of the Ely Office suite.",
+    "homepage": "https://github.com/ELY-Open-Source/ElyOffice",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v0.1.12/ElyShow-0.1.12-windows-x86_64-setup.exe",
+            "hash": "f8e232778e1952d3e96d32459c097fa2830ce03b81a22e4e0e20add77f04ee28"
+        }
+    },
+    "installer": {
+        "args": ["/S", "/D=$dir"]
+    },
+    "bin": "ely-show.exe",
+    "shortcuts": [
+        ["ely-show.exe", "ElyShow"]
+    ],
+    "post_install": [
+        "$nsisStartMenu = Join-Path $env:APPDATA 'Microsoft\\Windows\\Start Menu\\Programs\\ElyShow.lnk'",
+        "if (Test-Path $nsisStartMenu) { Remove-Item $nsisStartMenu -Force }",
+        "$nsisDesktop = Join-Path ([Environment]::GetFolderPath('Desktop')) 'ElyShow.lnk'",
+        "if (Test-Path $nsisDesktop) { Remove-Item $nsisDesktop -Force }",
+        "$baseDir = Join-Path $env:LOCALAPPDATA 'ElyOffice'",
+        "$sharedPersist = Join-Path (Split-Path $persist_dir -Parent) 'ElyOffice'",
+        "if (-not (Test-Path $sharedPersist)) { New-Item -ItemType Directory -Path $sharedPersist -Force | Out-Null }",
+        "if (Test-Path $baseDir) {",
+        "    $item = Get-Item $baseDir",
+        "    if ($item.LinkType -ne 'Junction') {",
+        "        Get-ChildItem -Path $baseDir -Force | ForEach-Object { Copy-Item -Path $_.FullName -Destination $sharedPersist -Recurse -Force }",
+        "        Remove-Item -Path $baseDir -Recurse -Force",
+        "    }",
+        "}",
+        "if (-not (Test-Path $baseDir)) { New-Item -ItemType Junction -Path $baseDir -Target $sharedPersist | Out-Null }",
+        "$appDataDir = Join-Path $baseDir 'ely-show'",
+        "$persistDir = $persist_dir",
+        "if (-not (Test-Path $persistDir)) { New-Item -ItemType Directory -Path $persistDir -Force | Out-Null }",
+        "if (Test-Path $appDataDir) {",
+        "    $item = Get-Item $appDataDir",
+        "    if ($item.LinkType -ne 'Junction') {",
+        "        Get-ChildItem -Path $appDataDir -Force | ForEach-Object { Copy-Item -Path $_.FullName -Destination $persistDir -Recurse -Force }",
+        "        Remove-Item -Path $appDataDir -Recurse -Force",
+        "    }",
+        "}",
+        "if (-not (Test-Path $appDataDir)) { New-Item -ItemType Junction -Path $appDataDir -Target $persistDir | Out-Null }"
+    ],
+    "pre_uninstall": [
+        "$nsisStartMenu = Join-Path $env:APPDATA 'Microsoft\\Windows\\Start Menu\\Programs\\ElyShow.lnk'",
+        "if (Test-Path $nsisStartMenu) { Remove-Item $nsisStartMenu -Force }",
+        "$nsisDesktop = Join-Path ([Environment]::GetFolderPath('Desktop')) 'ElyShow.lnk'",
+        "if (Test-Path $nsisDesktop) { Remove-Item $nsisDesktop -Force }",
+        "$baseDir = Join-Path $env:LOCALAPPDATA 'ElyOffice'",
+        "$appDataDir = Join-Path $baseDir 'ely-show'",
+        "if (Test-Path $appDataDir) {",
+        "    $item = Get-Item $appDataDir",
+        "    if ($item.LinkType -eq 'Junction') { Remove-Item -Path $appDataDir -Force }",
+        "}"
+    ],
+    "checkver": {
+        "github": "https://github.com/ELY-Open-Source/ElyOffice",
+        "regex": "v([\\d.]+)"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v$version/ElyShow-$version-windows-x86_64-setup.exe",
+                "hash": {
+                    "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v$version/ely-show-windows-x86_64.json",
+                    "jsonpath": "$.assets.windows-x86_64.sha256"
+                }
+            }
+        }
+    }
+}

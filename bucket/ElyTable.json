@@ -1,0 +1,74 @@
+{
+    "version": "0.1.12",
+    "description": "ElyTable: an offline-first spreadsheet editor for XLSX, ODS, and CSV files, powered by LibreOfficeKit. Part of the Ely Office suite.",
+    "homepage": "https://github.com/ELY-Open-Source/ElyOffice",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v0.1.12/ElyTable-0.1.12-windows-x86_64-setup.exe",
+            "hash": "e1923dc0eb7d49208a18d909ce67c22d32a2e3629d09ff9e76e86b488f26f7f9"
+        }
+    },
+    "installer": {
+        "args": ["/S", "/D=$dir"]
+    },
+    "bin": "ely-table.exe",
+    "shortcuts": [
+        ["ely-table.exe", "ElyTable"]
+    ],
+    "post_install": [
+        "$nsisStartMenu = Join-Path $env:APPDATA 'Microsoft\\Windows\\Start Menu\\Programs\\ElyTable.lnk'",
+        "if (Test-Path $nsisStartMenu) { Remove-Item $nsisStartMenu -Force }",
+        "$nsisDesktop = Join-Path ([Environment]::GetFolderPath('Desktop')) 'ElyTable.lnk'",
+        "if (Test-Path $nsisDesktop) { Remove-Item $nsisDesktop -Force }",
+        "$baseDir = Join-Path $env:LOCALAPPDATA 'ElyOffice'",
+        "$sharedPersist = Join-Path (Split-Path $persist_dir -Parent) 'ElyOffice'",
+        "if (-not (Test-Path $sharedPersist)) { New-Item -ItemType Directory -Path $sharedPersist -Force | Out-Null }",
+        "if (Test-Path $baseDir) {",
+        "    $item = Get-Item $baseDir",
+        "    if ($item.LinkType -ne 'Junction') {",
+        "        Get-ChildItem -Path $baseDir -Force | ForEach-Object { Copy-Item -Path $_.FullName -Destination $sharedPersist -Recurse -Force }",
+        "        Remove-Item -Path $baseDir -Recurse -Force",
+        "    }",
+        "}",
+        "if (-not (Test-Path $baseDir)) { New-Item -ItemType Junction -Path $baseDir -Target $sharedPersist | Out-Null }",
+        "$appDataDir = Join-Path $baseDir 'ely-table'",
+        "$persistDir = $persist_dir",
+        "if (-not (Test-Path $persistDir)) { New-Item -ItemType Directory -Path $persistDir -Force | Out-Null }",
+        "if (Test-Path $appDataDir) {",
+        "    $item = Get-Item $appDataDir",
+        "    if ($item.LinkType -ne 'Junction') {",
+        "        Get-ChildItem -Path $appDataDir -Force | ForEach-Object { Copy-Item -Path $_.FullName -Destination $persistDir -Recurse -Force }",
+        "        Remove-Item -Path $appDataDir -Recurse -Force",
+        "    }",
+        "}",
+        "if (-not (Test-Path $appDataDir)) { New-Item -ItemType Junction -Path $appDataDir -Target $persistDir | Out-Null }"
+    ],
+    "pre_uninstall": [
+        "$nsisStartMenu = Join-Path $env:APPDATA 'Microsoft\\Windows\\Start Menu\\Programs\\ElyTable.lnk'",
+        "if (Test-Path $nsisStartMenu) { Remove-Item $nsisStartMenu -Force }",
+        "$nsisDesktop = Join-Path ([Environment]::GetFolderPath('Desktop')) 'ElyTable.lnk'",
+        "if (Test-Path $nsisDesktop) { Remove-Item $nsisDesktop -Force }",
+        "$baseDir = Join-Path $env:LOCALAPPDATA 'ElyOffice'",
+        "$appDataDir = Join-Path $baseDir 'ely-table'",
+        "if (Test-Path $appDataDir) {",
+        "    $item = Get-Item $appDataDir",
+        "    if ($item.LinkType -eq 'Junction') { Remove-Item -Path $appDataDir -Force }",
+        "}"
+    ],
+    "checkver": {
+        "github": "https://github.com/ELY-Open-Source/ElyOffice",
+        "regex": "v([\\d.]+)"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v$version/ElyTable-$version-windows-x86_64-setup.exe",
+                "hash": {
+                    "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v$version/ely-table-windows-x86_64.json",
+                    "jsonpath": "$.assets.windows-x86_64.sha256"
+                }
+            }
+        }
+    }
+}
