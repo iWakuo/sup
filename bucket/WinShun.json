@@ -5,7 +5,7 @@
     "license": "MIT",
     "notes": [
         "需要管理员权限才能启用键盘拦截、NTFS 索引等功能，首次运行请以管理员身份启动。",
-        "配置持久化在 $persist_dir\\data\\WinShun\\WinShun.ini，通过 persist 机制与安装目录内的 data\\WinShun\\WinShun.ini 保持同步，升级/重装不丢失。"
+        "配置持久化在 $persist_dir\\data\\WinShun\\WinShun.ini，通过 persist 机制与安装目录内的 data\\WinShun 目录整体保持同步，升级/重装不丢失。"
     ],
     "architecture": {
         "64bit": {
@@ -15,15 +15,15 @@
     },
     "extract_dir": "WinShun",
     "pre_install": [
-        "if (-not (Test-Path -LiteralPath \"$dir\\data\\WinShun\\WinShun.ini\")) {",
-        "    New-Item -ItemType File -Path \"$dir\\data\\WinShun\\WinShun.ini\" -Force | Out-Null",
+        "if (-not (Test-Path -LiteralPath \"$dir\\data\")) {",
+        "    New-Item -ItemType Directory -Path \"$dir\\data\" -Force | Out-Null",
         "}"
     ],
     "shortcuts": [
         ["WinShun.exe", "WinShun"]
     ],
     "persist": [
-        "data\\WinShun\\WinShun.ini"
+        "data\\WinShun"
     ],
     "checkver": {
         "github": "https://github.com/LingCore/WinShun"
