@@ -46,6 +46,13 @@
             "    }",
             "} else {",
             "    Write-Host \"警告：未找到 mpv.conf，跳过 include 选项的开启。\" -ForegroundColor Yellow",
+            "}",
+            "",
+            "# 若 custom-opts.conf 不存在则创建空文件，避免 include 找不到文件报警告",
+            "$customOptsPath = Join-Path $mpvConfigDir 'custom-opts.conf'",
+            "if (-not (Test-Path $customOptsPath)) {",
+            "    New-Item -ItemType File -Path $customOptsPath -Force | Out-Null",
+            "    Write-Host \"已创建空的 custom-opts.conf。\" -ForegroundColor Green",
             "}"
         ]
     },
@@ -53,8 +60,11 @@
         "script": [
             "$mpvConfigDir = Join-Path $scoopdir 'persist\\mpv\\portable_config'",
             "if (Test-Path $mpvConfigDir) {",
-            "    Write-Host \"正在从 $mpvConfigDir 移除配置...\" -ForegroundColor Yellow",
-            "    Get-ChildItem -LiteralPath $mpvConfigDir -Force | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue",
+            "    Write-Host \"正在从 $mpvConfigDir 移除配置（保留 custom-opts.conf）...\" -ForegroundColor Yellow",
+            "    Get-ChildItem -LiteralPath $mpvConfigDir -Force |",
+            "        Where-Object { $_.Name -ne 'custom-opts.conf' } |",
+            "        Remove-Item -Recurse -Force -ErrorAction SilentlyContinue",
+            "    Write-Host \"已完成清理，custom-opts.conf 已保留。\" -ForegroundColor Green",
             "}"
         ]
     },
