@@ -1,0 +1,52 @@
+{
+    "version": "1.9.28",
+    "description": "一套开箱即用的 MPV 播放器配置, 多种 UI 主题皮肤, 常用插件, 插帧超分等功能, 支持 Windows / macOS / Linux。Modern Glass 中文 mpv 配置包，自动部署到 mpv 的 portable_config 持久化目录，并开启 custom-opts.conf 支持。",
+    "homepage": "https://github.com/akFace/mpv.config",
+    "license": "Unknown",
+    "depends": "mpv",
+    "url": "https://github.com/akFace/mpv.config/releases/download/v1.9.28/modern_glass_zh.zip",
+    "hash": "",
+    "installer": {
+        "script": [
+            "$mpvConfigDir = Join-Path $scoopdir 'persist\\mpv\\portable_config'",
+            "if (-not (Test-Path $mpvConfigDir)) {",
+            "    New-Item -ItemType Directory -Path $mpvConfigDir -Force | Out-Null",
+            "}",
+            "Write-Host \"正在部署 mpv 配置到 $mpvConfigDir ...\" -ForegroundColor Cyan",
+            "Copy-Item -Path (Join-Path $dir '*') -Destination $mpvConfigDir -Recurse -Force",
+            "",
+            "# 自动开启 include = \"~~/custom-opts.conf\" 选项",
+            "$mpvConfPath = Join-Path $mpvConfigDir 'mpv.conf'",
+            "if (Test-Path $mpvConfPath) {",
+            "    $content = Get-Content -LiteralPath $mpvConfPath -Raw",
+            "    # 匹配行首可能带空白的被注释的 include 行",
+            "    $pattern = '^\\s*#\\s*include\\s*=\\s*\"~~/custom-opts\\.conf\".*$'",
+            "    $replacement = 'include = \"~~/custom-opts.conf\"'",
+            "    $newContent = $content -replace $pattern, $replacement",
+            "    # 如果原文件中没有找到被注释的 include 行，则直接追加到文件末尾",
+            "    if ($newContent -eq $content) {",
+            "        $newContent = $content.TrimEnd() + \"`n`ninclude = \"\"~~/custom-opts.conf\"\"`n\"",
+            "    }",
+            "    Set-Content -LiteralPath $mpvConfPath -Value $newContent -Encoding UTF8",
+            "    Write-Host \"已自动开启 mpv.conf 中的 include 选项。\" -ForegroundColor Green",
+            "} else {",
+            "    Write-Host \"警告：未找到 mpv.conf，跳过 include 选项的自动开启。\" -ForegroundColor Yellow",
+            "}"
+        ]
+    },
+    "uninstaller": {
+        "script": [
+            "$mpvConfigDir = Join-Path $scoopdir 'persist\\mpv\\portable_config'",
+            "if (Test-Path $mpvConfigDir) {",
+            "    Write-Host \"正在从 $mpvConfigDir 移除配置...\" -ForegroundColor Yellow",
+            "    Get-ChildItem -LiteralPath $mpvConfigDir -Force | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue",
+            "}"
+        ]
+    },
+    "checkver": {
+        "github": "https://github.com/akFace/mpv.config"
+    },
+    "autoupdate": {
+        "url": "https://github.com/akFace/mpv.config/releases/download/v$version/modern_glass_zh.zip"
+    }
+}
