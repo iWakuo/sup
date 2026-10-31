@@ -1,12 +1,12 @@
 {
-    "version": "1.8.3",
+    "version": "1.8.4",
     "description": "Steam 本地入库图形界面：搜索入库、清单/密钥源级联、DLC 全解锁、联机启动、免 Steam 启动、D 加密模式切换。",
     "homepage": "https://github.com/hazjy/OSTGUI",
     "license": "GPL-3.0",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/hazjy/OSTGUI/releases/download/v1.8.3/OSTGUI-v1.8.3.zip",
-            "hash": "090beceba339be00bc02d6b58aa2b400978a44fbfba797e0fd2bfe7860c0be9b"
+            "url": "https://github.com/hazjy/OSTGUI/releases/download/v1.8.4/OSTGUI-v1.8.4.zip",
+            "hash": "b248d96b038d5fc79323be866489b1dfb324fb2fb6bfafd5c852e509f4d5c8e3"
         }
     },
     "extract_dir": "",
