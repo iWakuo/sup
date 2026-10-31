@@ -1,0 +1,45 @@
+{
+    "##": "Note: taskslinger.net may hang Windows PowerShell 5.1 (schannel vs Cloudflare). Scoop under 5.1 can stall on install/update — use PowerShell 7 (pwsh). Site serves no checksum files; hashes are verified per release at packaging time.",
+    "version": "0.9.5",
+    "description": "Native Windows task manager replacement built in C/Win32 with a custom Direct3D UI. Process, performance, services, startup, and connection monitoring with fast startup and no telemetry.",
+    "homepage": "https://taskslinger.net/",
+    "license": "Proprietary",
+    "notes": "Free beta. A paid perpetual license is available at https://taskslinger.net/buy/.",
+    "architecture": {
+        "64bit": {
+            "url": "https://taskslinger.net/download/v0.9.5/website/x64#/taskslinger.exe",
+            "hash": "6b4c656a9e4a576b061c962a7447c27e74073b7d0210839600f16043aab35e79"
+        },
+        "arm64": {
+            "url": "https://taskslinger.net/download/v0.9.5/website/arm64#/taskslinger-arm64.exe",
+            "hash": "f99f87640cdac2e0ea5137f084ce5193273f1e04d91b9935209714fb304015da"
+        }
+    },
+    "bin": "taskslinger.exe",
+    "shortcuts": [
+        [
+            "taskslinger.exe",
+            "TaskSlinger"
+        ]
+    ],
+    "persist": "TaskSlingerData",
+    "pre_install": [
+        "if (!(Test-Path \"$persist_dir\\TaskSlingerData\")) {",
+        "    New-Item -ItemType Directory -Path \"$persist_dir\\TaskSlingerData\" -Force | Out-Null",
+        "}"
+    ],
+    "checkver": {
+        "url": "https://taskslinger.net/",
+        "regex": "\"softwareVersion\": \"([0-9.]+)\""
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://taskslinger.net/download/v$version/website/x64#/taskslinger.exe"
+            },
+            "arm64": {
+                "url": "https://taskslinger.net/download/v$version/website/arm64#/taskslinger-arm64.exe"
+            }
+        }
+    }
+}
