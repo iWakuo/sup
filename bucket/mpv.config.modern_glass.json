@@ -1,10 +1,10 @@
 {
-    "version": "1.9.28",
+    "version": "1.9.29",
     "description": "Modern Glass 中文 mpv 配置包，自动部署到 mpv 的 portable_config 持久化目录，并自动开启 include 选项。",
     "homepage": "https://github.com/akFace/mpv.config",
     "license": "Unknown",
     "depends": "mpv",
-    "url": "https://github.com/akFace/mpv.config/releases/download/v1.9.28/modern_glass_zh.zip",
+    "url": "https://github.com/akFace/mpv.config/releases/download/v1.9.29/modern_glass_zh.zip",
     "hash": "",
     "installer": {
         "script": [
