@@ -1,20 +1,26 @@
 {
-    "version": "0.1.12",
+    "version": "0.1.13",
     "description": "ElyDoc: an offline-first word processor for DOCX and ODT files, powered by LibreOfficeKit. Part of the Ely Office suite.",
     "homepage": "https://github.com/ELY-Open-Source/ElyOffice",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v0.1.12/ElyDoc-0.1.12-windows-x86_64-setup.exe",
-            "hash": "9672100f530bb2507e8cb94439ab9cc0733789ed85fd4d83e38aab907d9c7cf9"
+            "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v0.1.13/ElyDoc-0.1.13-windows-x86_64-setup.exe",
+            "hash": "0d75aa3f8eac5577df5f7dd1b408aecec6e2d0904378f66441b5e521cd4befb0"
         }
     },
     "installer": {
-        "args": ["/S", "/D=$dir"]
+        "args": [
+            "/S",
+            "/D=$dir"
+        ]
     },
     "bin": "ely-doc.exe",
     "shortcuts": [
-        ["ely-doc.exe", "ElyDoc"]
+        [
+            "ely-doc.exe",
+            "ElyDoc"
+        ]
     ],
     "post_install": [
         "$nsisStartMenu = Join-Path $env:APPDATA 'Microsoft\\Windows\\Start Menu\\Programs\\ElyDoc.lnk'",
