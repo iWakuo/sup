@@ -52,7 +52,20 @@
         "        Remove-Item -Path $appDataDir -Recurse -Force",
         "    }",
         "}",
-        "if (-not (Test-Path $appDataDir)) { New-Item -ItemType Junction -Path $appDataDir -Target $persistDir | Out-Null }"
+        "if (-not (Test-Path $appDataDir)) { New-Item -ItemType Junction -Path $appDataDir -Target $persistDir | Out-Null }",
+        "$extKey = 'HKCU:\\Software\\Classes\\.md'",
+        "$progId = 'ElyMark.Markdown'",
+        "if (-not (Test-Path $extKey)) { New-Item -Path $extKey -Force | Out-Null }",
+        "Set-Item -Path $extKey -Value $progId -Force",
+        "$progIdKey = \"HKCU:\\Software\\Classes\\$progId\"",
+        "if (-not (Test-Path $progIdKey)) { New-Item -Path $progIdKey -Force | Out-Null }",
+        "Set-Item -Path $progIdKey -Value 'ElyMark Markdown' -Force",
+        "New-ItemProperty -Path $progIdKey -Name 'FriendlyTypeName' -Value 'ElyMark Markdown' -PropertyType String -Force | Out-Null",
+        "$shellNew = \"$extKey\\ShellNew\"",
+        "if (-not (Test-Path $shellNew)) { New-Item -Path $shellNew -Force | Out-Null }",
+        "New-ItemProperty -Path $shellNew -Name 'NullFile' -Value '' -PropertyType String -Force | Out-Null",
+        "Remove-ItemProperty -Path $shellNew -Name 'FileName' -Force -ErrorAction SilentlyContinue",
+        "Write-Host 'ElyMark: New menu item registered (NullFile). Restart Explorer to apply.'"
     ],
     "pre_uninstall": [
         "$nsisStartMenu = Join-Path $env:APPDATA 'Microsoft\\Windows\\Start Menu\\Programs\\ElyMark.lnk'",
@@ -65,7 +78,17 @@
         "    $item = Get-Item $appDataDir",
         "    if ($item.LinkType -eq 'Junction') { Remove-Item -Path $appDataDir -Force }",
         "}",
-        "Remove-Item -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Ely Office ElyMark' -Recurse -Force -ErrorAction SilentlyContinue"
+        "Remove-Item -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Ely Office ElyMark' -Recurse -Force -ErrorAction SilentlyContinue",
+        "$extKey = 'HKCU:\\Software\\Classes\\.md'",
+        "$progId = 'ElyMark.Markdown'",
+        "$shellNew = \"$extKey\\ShellNew\"",
+        "$currentProgId = (Get-Item -Path $extKey -ErrorAction SilentlyContinue).GetValue('')",
+        "if ($currentProgId -eq $progId) {",
+        "    Remove-Item -Path $extKey -Force -ErrorAction SilentlyContinue",
+        "    Remove-Item -Path \"HKCU:\\Software\\Classes\\$progId\" -Recurse -Force -ErrorAction SilentlyContinue",
+        "} else {",
+        "    if (Test-Path $shellNew) { Remove-ItemProperty -Path $shellNew -Name 'NullFile' -Force -ErrorAction SilentlyContinue }",
+        "}"
     ],
     "checkver": {
         "github": "https://github.com/ELY-Open-Source/ElyOffice",
