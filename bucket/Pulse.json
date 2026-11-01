@@ -7,18 +7,21 @@
     "hash": "a2dee2348b610bb3dc4882fe80ea8dd94dcef73bb6ca2e7808585ad932ccbe6c",
     "installer": {
         "script": [
-            "Start-Process -FilePath \"$dir\\PulseSetup-$version.exe\" -ArgumentList '/S', \"/D=$dir\" -Wait"
+            "Start-Process -FilePath \"$dir\\PulseSetup-$version.exe\" -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', \"/DIR=`\"$dir`\"\" -Wait"
         ]
     },
     "post_install": [
-        "$targetDir = 'D:\\Scoop\\apps\\Pulse'",
-        "if (-not (Test-Path $targetDir)) { New-Item -ItemType Directory -Path $targetDir -Force | Out-Null }",
-        "if (Test-Path $targetDir) { Remove-Item -Path $targetDir -Force -Recurse -ErrorAction SilentlyContinue }",
-        "New-Item -ItemType Junction -Path $targetDir -Target $dir -Force | Out-Null"
+        "$dataDir = \"$env:LOCALAPPDATA\\Pulse\"",
+        "if (Test-Path $dataDir) {",
+        "    if (-not (Test-Path $persist_dir)) { New-Item -ItemType Directory -Path $persist_dir -Force | Out-Null }",
+        "    Move-Item -Path \"$dataDir\\*\" -Destination $persist_dir -Force -ErrorAction SilentlyContinue",
+        "    Remove-Item -Path $dataDir -Force -Recurse -ErrorAction SilentlyContinue",
+        "}",
+        "New-Item -ItemType Junction -Path $dataDir -Target $persist_dir -Force | Out-Null"
     ],
     "pre_uninstall": [
-        "$targetDir = 'D:\\Scoop\\apps\\Pulse'",
-        "if (Test-Path $targetDir) { Remove-Item -Path $targetDir -Force -Recurse -ErrorAction SilentlyContinue }"
+        "$dataDir = \"$env:LOCALAPPDATA\\Pulse\"",
+        "if (Test-Path $dataDir) { Remove-Item -Path $dataDir -Force -Recurse -ErrorAction SilentlyContinue }"
     ],
     "shortcuts": [
         ["Pulse.exe", "Pulse"]
