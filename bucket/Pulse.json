@@ -12,7 +12,10 @@
     },
     "post_install": [
         "$globalStartMenu = Join-Path $env:ProgramData 'Microsoft\\Windows\\Start Menu\\Programs\\Pulse'",
-        "if (Test-Path $globalStartMenu) { Remove-Item -Path $globalStartMenu -Force -Recurse -ErrorAction SilentlyContinue }",
+        "if (Test-Path $globalStartMenu) {",
+        "    $removeScript = \"Remove-Item -LiteralPath '$globalStartMenu' -Force -Recurse -ErrorAction SilentlyContinue\"",
+        "    Start-Process powershell -ArgumentList '-NoProfile', '-Command', $removeScript -Verb RunAs -Wait",
+        "}",
         "if (-not (Test-Path $persist_dir)) { New-Item -ItemType Directory -Path $persist_dir -Force | Out-Null }",
         "$dataDir = \"$env:LOCALAPPDATA\\Pulse\"",
         "if (Test-Path $dataDir) {",
@@ -38,7 +41,10 @@
     },
     "pre_uninstall": [
         "$globalStartMenu = Join-Path $env:ProgramData 'Microsoft\\Windows\\Start Menu\\Programs\\Pulse'",
-        "if (Test-Path $globalStartMenu) { Remove-Item -Path $globalStartMenu -Force -Recurse -ErrorAction SilentlyContinue }",
+        "if (Test-Path $globalStartMenu) {",
+        "    $removeScript = \"Remove-Item -LiteralPath '$globalStartMenu' -Force -Recurse -ErrorAction SilentlyContinue\"",
+        "    Start-Process powershell -ArgumentList '-NoProfile', '-Command', $removeScript -Verb RunAs -Wait",
+        "}",
         "$dataDir = \"$env:LOCALAPPDATA\\Pulse\"",
         "if (Test-Path $dataDir) { Remove-Item -Path $dataDir -Force -Recurse -ErrorAction SilentlyContinue }"
     ],
