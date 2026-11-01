@@ -49,7 +49,20 @@
         "        Remove-Item -Path $appDataDir -Recurse -Force",
         "    }",
         "}",
-        "if (-not (Test-Path $appDataDir)) { New-Item -ItemType Junction -Path $appDataDir -Target $persistDir | Out-Null }"
+        "if (-not (Test-Path $appDataDir)) { New-Item -ItemType Junction -Path $appDataDir -Target $persistDir | Out-Null }",
+        "$extKey = 'HKCU:\\Software\\Classes\\.xlsx'",
+        "$progId = 'ElyTable.Spreadsheet'",
+        "if (-not (Test-Path $extKey)) { New-Item -Path $extKey -Force | Out-Null }",
+        "Set-Item -Path $extKey -Value $progId -Force",
+        "$progIdKey = \"HKCU:\\Software\\Classes\\$progId\"",
+        "if (-not (Test-Path $progIdKey)) { New-Item -Path $progIdKey -Force | Out-Null }",
+        "Set-Item -Path $progIdKey -Value 'ElyTable Spreadsheet' -Force",
+        "New-ItemProperty -Path $progIdKey -Name 'FriendlyTypeName' -Value 'ElyTable Spreadsheet' -PropertyType String -Force | Out-Null",
+        "$shellNew = \"$extKey\\ShellNew\"",
+        "if (-not (Test-Path $shellNew)) { New-Item -Path $shellNew -Force | Out-Null }",
+        "New-ItemProperty -Path $shellNew -Name 'NullFile' -Value '' -PropertyType String -Force | Out-Null",
+        "Remove-ItemProperty -Path $shellNew -Name 'FileName' -Force -ErrorAction SilentlyContinue",
+        "Write-Host 'ElyTable: New menu item registered (NullFile). Restart Explorer to apply.'"
     ],
     "pre_uninstall": [
         "$nsisStartMenu = Join-Path $env:APPDATA 'Microsoft\\Windows\\Start Menu\\Programs\\ElyTable.lnk'",
@@ -61,6 +74,16 @@
         "if (Test-Path $appDataDir) {",
         "    $item = Get-Item $appDataDir",
         "    if ($item.LinkType -eq 'Junction') { Remove-Item -Path $appDataDir -Force }",
+        "}",
+        "$extKey = 'HKCU:\\Software\\Classes\\.xlsx'",
+        "$progId = 'ElyTable.Spreadsheet'",
+        "$shellNew = \"$extKey\\ShellNew\"",
+        "$currentProgId = (Get-Item -Path $extKey -ErrorAction SilentlyContinue).GetValue('')",
+        "if ($currentProgId -eq $progId) {",
+        "    Remove-Item -Path $extKey -Force -ErrorAction SilentlyContinue",
+        "    Remove-Item -Path \"HKCU:\\Software\\Classes\\$progId\" -Recurse -Force -ErrorAction SilentlyContinue",
+        "} else {",
+        "    if (Test-Path $shellNew) { Remove-ItemProperty -Path $shellNew -Name 'NullFile' -Force -ErrorAction SilentlyContinue }",
         "}"
     ],
     "checkver": {
