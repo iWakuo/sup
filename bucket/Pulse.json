@@ -13,14 +13,29 @@
     "post_install": [
         "$globalStartMenu = Join-Path $env:ProgramData 'Microsoft\\Windows\\Start Menu\\Programs\\Pulse'",
         "if (Test-Path $globalStartMenu) { Remove-Item -Path $globalStartMenu -Force -Recurse -ErrorAction SilentlyContinue }",
+        "if (-not (Test-Path $persist_dir)) { New-Item -ItemType Directory -Path $persist_dir -Force | Out-Null }",
         "$dataDir = \"$env:LOCALAPPDATA\\Pulse\"",
         "if (Test-Path $dataDir) {",
-        "    if (-not (Test-Path $persist_dir)) { New-Item -ItemType Directory -Path $persist_dir -Force | Out-Null }",
         "    Move-Item -Path \"$dataDir\\*\" -Destination $persist_dir -Force -ErrorAction SilentlyContinue",
         "    Remove-Item -Path $dataDir -Force -Recurse -ErrorAction SilentlyContinue",
         "}",
-        "New-Item -ItemType Junction -Path $dataDir -Target $persist_dir -Force | Out-Null"
+        "New-Item -ItemType Junction -Path $dataDir -Target $persist_dir -Force | Out-Null",
+        "$unins = Get-ChildItem -Path $dir -Filter 'unins*.exe' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1",
+        "if ($unins) { $unins.FullName | Out-File -FilePath \"$dir\\uninstaller.path\" -Encoding ascii -Force }"
     ],
+    "uninstaller": {
+        "script": [
+            "if ($cmd -eq 'uninstall') {",
+            "    $pathFile = \"$dir\\uninstaller.path\"",
+            "    if (Test-Path $pathFile) {",
+            "        $uninsPath = (Get-Content $pathFile -Raw).Trim()",
+            "        if ($uninsPath -and (Test-Path $uninsPath)) {",
+            "            Start-Process -FilePath $uninsPath -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART' -Wait",
+            "        }",
+            "    }",
+            "}"
+        ]
+    },
     "pre_uninstall": [
         "$globalStartMenu = Join-Path $env:ProgramData 'Microsoft\\Windows\\Start Menu\\Programs\\Pulse'",
         "if (Test-Path $globalStartMenu) { Remove-Item -Path $globalStartMenu -Force -Recurse -ErrorAction SilentlyContinue }",
