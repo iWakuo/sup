@@ -10,9 +10,10 @@
         }
     },
     "installer": {
-        "args": [
-            "/S",
-            "/D=$dir"
+        "script": [
+            "Get-ChildItem \"$dir\\*-setup.exe\" | Select-Object -First 1 | ForEach-Object {",
+            "    Expand-7zipArchive -Path $_.FullName -DestinationPath $dir -Removal -Switches '-xr!$PLUGINSDIR -xr!uninstall.exe'",
+            "}"
         ]
     },
     "bin": "ely-mark.exe",
@@ -23,6 +24,9 @@
         ]
     ],
     "post_install": [
+        "if (Test-Path \"$dir\\uninstall.exe\") { Remove-Item \"$dir\\uninstall.exe\" -Force }",
+        "if (Test-Path \"$dir\\.ely-installed\") { Remove-Item \"$dir\\.ely-installed\" -Force }",
+        "Remove-Item -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Ely Office ElyMark' -Recurse -Force -ErrorAction SilentlyContinue",
         "$nsisStartMenu = Join-Path $env:APPDATA 'Microsoft\\Windows\\Start Menu\\Programs\\ElyMark.lnk'",
         "if (Test-Path $nsisStartMenu) { Remove-Item $nsisStartMenu -Force }",
         "$nsisDesktop = Join-Path ([Environment]::GetFolderPath('Desktop')) 'ElyMark.lnk'",
@@ -60,7 +64,8 @@
         "if (Test-Path $appDataDir) {",
         "    $item = Get-Item $appDataDir",
         "    if ($item.LinkType -eq 'Junction') { Remove-Item -Path $appDataDir -Force }",
-        "}"
+        "}",
+        "Remove-Item -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Ely Office ElyMark' -Recurse -Force -ErrorAction SilentlyContinue"
     ],
     "checkver": {
         "github": "https://github.com/ELY-Open-Source/ElyOffice",
