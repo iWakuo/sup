@@ -10,9 +10,10 @@
         }
     },
     "installer": {
-        "args": [
-            "/S",
-            "/D=$dir"
+        "script": [
+            "Get-ChildItem \"$dir\\*-setup.exe\" | Select-Object -First 1 | ForEach-Object {",
+            "    Expand-7zipArchive -Path $_.FullName -DestinationPath $dir -Removal -Switches '-xr!$PLUGINSDIR -xr!uninstall.exe'",
+            "}"
         ]
     },
     "bin": "ely-pdf.exe",
