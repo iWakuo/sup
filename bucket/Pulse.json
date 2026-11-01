@@ -7,10 +7,12 @@
     "hash": "a2dee2348b610bb3dc4882fe80ea8dd94dcef73bb6ca2e7808585ad932ccbe6c",
     "installer": {
         "script": [
-            "Start-Process -FilePath \"$dir\\PulseSetup-$version.exe\" -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', \"/DIR=`\"$dir`\"\" -Wait"
+            "Start-Process -FilePath \"$dir\\PulseSetup-$version.exe\" -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/NOICONS', '/SP-', \"/DIR=`\"$dir`\"\" -Wait"
         ]
     },
     "post_install": [
+        "$globalStartMenu = Join-Path $env:ProgramData 'Microsoft\\Windows\\Start Menu\\Programs\\Pulse'",
+        "if (Test-Path $globalStartMenu) { Remove-Item -Path $globalStartMenu -Force -Recurse -ErrorAction SilentlyContinue }",
         "$dataDir = \"$env:LOCALAPPDATA\\Pulse\"",
         "if (Test-Path $dataDir) {",
         "    if (-not (Test-Path $persist_dir)) { New-Item -ItemType Directory -Path $persist_dir -Force | Out-Null }",
@@ -20,6 +22,8 @@
         "New-Item -ItemType Junction -Path $dataDir -Target $persist_dir -Force | Out-Null"
     ],
     "pre_uninstall": [
+        "$globalStartMenu = Join-Path $env:ProgramData 'Microsoft\\Windows\\Start Menu\\Programs\\Pulse'",
+        "if (Test-Path $globalStartMenu) { Remove-Item -Path $globalStartMenu -Force -Recurse -ErrorAction SilentlyContinue }",
         "$dataDir = \"$env:LOCALAPPDATA\\Pulse\"",
         "if (Test-Path $dataDir) { Remove-Item -Path $dataDir -Force -Recurse -ErrorAction SilentlyContinue }"
     ],
