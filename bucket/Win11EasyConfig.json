@@ -4,7 +4,6 @@
     "homepage": "https://github.com/lhj1618GitHub/win-set",
     "license": "Unknown",
     "url": "https://github.com/lhj1618GitHub/win-set/releases/download/1.1.2/Windows11-set-1.1.2.zip",
-    "hash": "SKIP",
     "bin": "Windows11轻松设置.exe",
     "shortcuts": [
         ["Windows11轻松设置.exe", "Windows11轻松设置"]
