@@ -1,13 +1,18 @@
 {
-    "version": "1.12",
-    "description": "Windows11轻松设置软件是一款专门为Windows 11系统设计的工具软件，具有多种特色功能和亮点。通过界面简洁、个性化定制、一键优化等功能，可以帮助用户更加便捷地进行系统设置和管理。",
-    "homepage": "https://www.123pan.com/s/1Zj8Vv-8bbcv.html",
-    "license": "MIT License",
-    "url": "https://zip2.webgetstore.com/1e49b4e16e0b397ffa5786c856ffe68d/6ad2e899/2026/06/13/32aa16d28f18a862fd77f94004a526f0.7z?fn=Windows11%E8%BD%BB%E6%9D%BE%E8%AE%BE%E7%BD%AE1.12%E6%AD%A3%E5%BC%8F%E7%89%88%E3%80%9020251207%E3%80%91.7z",
+    "version": "1.1.2",
+    "description": "Windows 11 轻松设置工具",
+    "homepage": "https://github.com/lhj1618GitHub/win-set",
+    "license": "Unknown",
+    "url": "https://github.com/lhj1618GitHub/win-set/releases/download/1.1.2/Windows11-set-1.1.2.zip",
+    "hash": "SKIP",
+    "bin": "Windows11轻松设置.exe",
     "shortcuts": [
-        [
-            "Windows11轻松设置.exe",
-            "Windows11轻松设置"
-        ]
-    ]
+        ["Windows11轻松设置.exe", "Windows11轻松设置"]
+    ],
+    "checkver": {
+        "github": "https://github.com/lhj1618GitHub/win-set"
+    },
+    "autoupdate": {
+        "url": "https://github.com/lhj1618GitHub/win-set/releases/download/$version/Windows11-set-$version.zip"
+    }
 }
