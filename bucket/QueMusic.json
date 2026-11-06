@@ -1,0 +1,95 @@
+{
+    "version": "0.7.2-Beta",
+    "description": "基于 Qt QML 的高性能跨平台开源音乐播放器",
+    "homepage": "https://github.com/BroNekoX/QueMusic",
+    "license": "Apache-2.0",
+    "notes": [
+        "QueMusic 为开源免费软件，禁止商业用途。",
+        "Account.ini 通过 Scoop persist 机制保留。",
+        "%APPDATA%\\BroNekoX 与 %LOCALAPPDATA%\\BroNekoX 已通过 Junction 持久化到 Scoop persist 目录。"
+    ],
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/BroNekoX/QueMusic/releases/download/v0.7.2-Beta/QueMusic-Windows.zip",
+            "hash": "",
+            "extract_dir": "QueMusic1"
+        }
+    },
+    "bin": "QueMusic.exe",
+    "shortcuts": [
+        ["QueMusic.exe", "QueMusic"]
+    ],
+    "persist": [
+        "Account.ini"
+    ],
+    "post_install": [
+        "$persistRoot = [System.IO.Path]::GetFullPath($persist_dir)",
+        "if (!(Test-Path $persistRoot)) { New-Item -ItemType Directory -Path $persistRoot -Force | Out-Null }",
+        "$mappings = @(",
+        "    @{ EnvName = 'APPDATA';      SubDir = 'Roaming' },",
+        "    @{ EnvName = 'LOCALAPPDATA'; SubDir = 'Local' }",
+        ")",
+        "foreach ($m in $mappings) {",
+        "    $envValue = [Environment]::GetEnvironmentVariable($m.EnvName)",
+        "    $appDataDir = [System.IO.Path]::GetFullPath((Join-Path $envValue 'BroNekoX'))",
+        "    $targetDir  = [System.IO.Path]::GetFullPath((Join-Path $persistRoot $m.SubDir))",
+        "    if (!(Test-Path $targetDir)) { New-Item -ItemType Directory -Path $targetDir -Force | Out-Null }",
+        "    $action = 'create'",
+        "    if (Test-Path $appDataDir) {",
+        "        $item = Get-Item $appDataDir -Force",
+        "        $isLink = ($item.LinkType -eq 'Junction') -or ($item.LinkType -eq 'SymbolicLink')",
+        "        if ($isLink) {",
+        "            $existingTarget = [System.IO.Path]::GetFullPath((@($item.Target)[0]))",
+        "            if ($existingTarget -ieq $targetDir) { $action = 'skip' }",
+        "            elseif ($existingTarget -ieq $persistRoot) { $action = 'migrate-root' }",
+        "            else { $action = 'replace' }",
+        "        } else { $action = 'migrate' }",
+        "    }",
+        "    if ($action -eq 'skip') { continue }",
+        "    switch ($action) {",
+        "        'replace' { cmd /c rmdir \"$appDataDir\" }",
+        "        'migrate-root' {",
+        "            cmd /c rmdir \"$appDataDir\"",
+        "            Get-ChildItem -Path $persistRoot -Force | Where-Object { $_.Name -notin @('Account.ini','Roaming','Local') } | ForEach-Object { Move-Item -Path $_.FullName -Destination $targetDir -Force }",
+        "        }",
+        "        'migrate' {",
+        "            Get-ChildItem -Path $appDataDir -Force | ForEach-Object { Move-Item -Path $_.FullName -Destination $targetDir -Force }",
+        "            Remove-Item $appDataDir -Force -Recurse",
+        "        }",
+        "    }",
+        "    New-Item -ItemType Junction -Path $appDataDir -Target $targetDir | Out-Null",
+        "}"
+    ],
+    "uninstaller": {
+        "script": [
+            "$persistRoot = [System.IO.Path]::GetFullPath($persist_dir)",
+            "$mappings = @(",
+            "    @{ EnvName = 'APPDATA';      SubDir = 'Roaming' },",
+            "    @{ EnvName = 'LOCALAPPDATA'; SubDir = 'Local' }",
+            ")",
+            "foreach ($m in $mappings) {",
+            "    $envValue = [Environment]::GetEnvironmentVariable($m.EnvName)",
+            "    $appDataDir = [System.IO.Path]::GetFullPath((Join-Path $envValue 'BroNekoX'))",
+            "    $targetDir  = [System.IO.Path]::GetFullPath((Join-Path $persistRoot $m.SubDir))",
+            "    if (Test-Path $appDataDir) {",
+            "        $item = Get-Item $appDataDir -Force",
+            "        if (($item.LinkType -eq 'Junction') -or ($item.LinkType -eq 'SymbolicLink')) {",
+            "            $existingTarget = [System.IO.Path]::GetFullPath((@($item.Target)[0]))",
+            "            if ($existingTarget -ieq $targetDir) { cmd /c rmdir \"$appDataDir\" }",
+            "        }",
+            "    }",
+            "}"
+        ]
+    },
+    "checkver": {
+        "github": "https://github.com/BroNekoX/QueMusic",
+        "regex": "v([\\d.]+-Beta)"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/BroNekoX/QueMusic/releases/download/v$version/QueMusic-Windows.zip"
+            }
+        }
+    }
+}
