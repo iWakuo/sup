@@ -1,0 +1,49 @@
+{
+    "version": "2.2.0+220",
+    "description": "文析助手（AsterLink），聚合 17 家网盘与 GitHub 文件源的 Android/Windows 解析与管理工具。",
+    "homepage": "https://github.com/z7786/wenxi",
+    "license": "AGPL-3.0",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/z7786/wenxi/releases/download/v2.2.0%2B220/asterlink-2.2.0%2B220-windows-x64-setup.exe",
+            "hash": "3b587ee27f8a3c1a77091ec0baa297718ae3a371e5691f11cce34ad4d39f323b"
+        }
+    },
+    "innosetup": true,
+    "shortcuts": [
+        ["AsterLink.exe", "AsterLink"]
+    ],
+    "pre_install": [
+        "$target = $persist_dir",
+        "$link = Join-Path $env:APPDATA 'com.asterlink'",
+        "if (!(Test-Path $target)) { New-Item -ItemType Directory -Path $target -Force | Out-Null }",
+        "if (Test-Path $link) {",
+        "    $i = Get-Item $link -Force",
+        "    if ($i.LinkType -eq 'Junction') { Remove-Item $link -Force }",
+        "    elseif ($i.PSIsContainer -and -not (Get-ChildItem $link -Force)) { Remove-Item $link -Force }",
+        "    else {",
+        "        Copy-Item \"$link\\*\" $target -Recurse -Force -ErrorAction SilentlyContinue",
+        "        Remove-Item $link -Recurse -Force",
+        "    }",
+        "}",
+        "New-Item -ItemType Junction -Path $link -Target $target -Force | Out-Null"
+    ],
+    "post_uninstall": [
+        "$link = Join-Path $env:APPDATA 'com.asterlink'",
+        "if ((Test-Path $link) -and ((Get-Item $link -Force).LinkType -eq 'Junction')) { Remove-Item $link -Force }"
+    ],
+    "checkver": {
+        "github": "https://github.com/z7786/wenxi"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/z7786/wenxi/releases/download/v$version/asterlink-$version-windows-x64-setup.exe"
+            }
+        },
+        "hash": {
+            "url": "https://github.com/z7786/wenxi/releases/download/v$version/SHA256SUMS.txt",
+            "regex": "$basename\\s+$sha256"
+        }
+    }
+}
