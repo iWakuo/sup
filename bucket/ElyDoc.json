@@ -1,12 +1,12 @@
 {
-    "version": "0.1.14",
+    "version": "0.1.15",
     "description": "ElyDoc: an offline-first word processor for DOCX and ODT files, powered by LibreOfficeKit. Part of the Ely Office suite.",
     "homepage": "https://github.com/ELY-Open-Source/ElyOffice",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v0.1.14/ElyDoc-0.1.14-windows-x86_64-setup.exe",
-            "hash": "c07a31a576447093416a5dd766271c196b16ed5f69f2724a8e7d1f53c9cce244"
+            "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v0.1.15/ElyDoc-0.1.15-windows-x86_64-setup.exe",
+            "hash": "72190054259250133bf3eaeb22bfddcb520212633635b8f2697e6709633ca5b3"
         }
     },
     "installer": {
