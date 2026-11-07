@@ -1,12 +1,12 @@
 {
-    "version": "0.1.13",
+    "version": "0.1.14",
     "description": "ElyPDF: an offline-first PDF reader and editor with OCR and signature support, powered by MuPDF and Tesseract. Part of the Ely Office suite.",
     "homepage": "https://github.com/ELY-Open-Source/ElyOffice",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v0.1.13/ElyPDF-0.1.13-windows-x86_64-setup.exe",
-            "hash": "ae5ca2e79ade553884bbe5337fc1ac29e647587f52c5d1acd6e4c04a50773768"
+            "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v0.1.14/ElyPDF-0.1.14-windows-x86_64-setup.exe",
+            "hash": "1a6e7d9a1b58b7bfc5f15b1e753607b3b819fec014f67c29863bf9e362af52cd"
         }
     },
     "installer": {
