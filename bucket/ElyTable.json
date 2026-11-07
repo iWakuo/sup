@@ -1,12 +1,12 @@
 {
-    "version": "0.1.13",
+    "version": "0.1.14",
     "description": "ElyTable: an offline-first spreadsheet editor for XLSX, ODS, and CSV files, powered by LibreOfficeKit. Part of the Ely Office suite.",
     "homepage": "https://github.com/ELY-Open-Source/ElyOffice",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v0.1.13/ElyTable-0.1.13-windows-x86_64-setup.exe",
-            "hash": "25dacf9d63d56b50781d5857c2df2d7ed5c09d815685a648e50fc5b47406f8c1"
+            "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v0.1.14/ElyTable-0.1.14-windows-x86_64-setup.exe",
+            "hash": "a13bb7358d1863df5c39504c18fdf6170e455b5a2f812e09fb9ba90c90ad5b4e"
         }
     },
     "installer": {
