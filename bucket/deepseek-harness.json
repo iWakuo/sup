@@ -43,6 +43,7 @@
         ]
     ],
     "persist": "AppData",
+    "env_add_path": "resources\\runtime\\cli\\bin",
     "pre_uninstall": [
         "$bucket = $install.bucket",
         ". \"$bucketsdir\\$bucket\\bin\\utils.ps1\"",
