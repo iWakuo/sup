@@ -1,0 +1,76 @@
+{
+    "version": "0.6.6",
+    "description": "极速多协议下载管理器，免费开源的 IDM 替代品",
+    "homepage": "https://github.com/zerx-lab/FluxDown",
+    "license": "AGPL-3.0",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/zerx-lab/FluxDown/releases/download/v0.6.6/FluxDown-0.6.6-windows-x64-portable.zip",
+            "hash": "b385e83f74e21bf1198d807889a394f920d54fbf8debdf5011999daa330d16a1"
+        },
+        "arm64": {
+            "url": "https://github.com/zerx-lab/FluxDown/releases/download/v0.6.6/FluxDown-0.6.6-windows-arm64-portable.zip",
+            "hash": "9f72d8fd73229f850674d3432e7fbaf9adc18879d0adfee4d6c2f04663825a01"
+        }
+    },
+    "bin": [
+        "fluxdown-desktop.exe",
+        "flux_down.exe",
+        "fluxdownd.exe",
+        "fluxdown-agent.exe"
+    ],
+    "shortcuts": [
+        [
+            "fluxdown-desktop.exe",
+            "FluxDown"
+        ]
+    ],
+    "post_install": [
+        "if (Test-Path \"$dir\\portable\") { Remove-Item \"$dir\\portable\" -Force }",
+        "function Link-PersistDir($linkPath, $targetPath) {",
+        "    if (!(Test-Path $targetPath)) { New-Item -ItemType Directory -Path $targetPath -Force | Out-Null }",
+        "    if (Test-Path $linkPath) {",
+        "        $item = Get-Item $linkPath -Force",
+        "        if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) {",
+        "            Remove-Item $linkPath -Force",
+        "        } else {",
+        "            Get-ChildItem -Path $linkPath -Force | Move-Item -Destination $targetPath -Force",
+        "            Remove-Item $linkPath -Force -Recurse",
+        "        }",
+        "    }",
+        "    New-Item -ItemType Junction -Path $linkPath -Target $targetPath | Out-Null",
+        "}",
+        "Link-PersistDir \"$env:LOCALAPPDATA\\FluxDown\" \"$persist_dir\\LocalAppData\\FluxDown\"",
+        "Link-PersistDir \"$env:APPDATA\\zerx\" \"$persist_dir\\AppData\\Roaming\\zerx\""
+    ],
+    "pre_uninstall": [
+        "$paths = @(\"$env:LOCALAPPDATA\\FluxDown\", \"$env:APPDATA\\zerx\")",
+        "foreach ($p in $paths) {",
+        "    if (Test-Path $p) {",
+        "        $item = Get-Item $p -Force",
+        "        if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { Remove-Item $p -Force }",
+        "    }",
+        "}"
+    ],
+    "checkver": {
+        "github": "https://github.com/zerx-lab/FluxDown"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/zerx-lab/FluxDown/releases/download/v$version/FluxDown-$version-windows-x64-portable.zip",
+                "hash": {
+                    "url": "$baseurl/SHA256SUMS.txt",
+                    "regex": "$sha256\\s+$basename"
+                }
+            },
+            "arm64": {
+                "url": "https://github.com/zerx-lab/FluxDown/releases/download/v$version/FluxDown-$version-windows-arm64-portable.zip",
+                "hash": {
+                    "url": "$baseurl/SHA256SUMS.txt",
+                    "regex": "$sha256\\s+$basename"
+                }
+            }
+        }
+    }
+}
