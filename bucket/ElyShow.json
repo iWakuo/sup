@@ -1,12 +1,12 @@
 {
-    "version": "0.1.14",
+    "version": "0.1.15",
     "description": "ElyShow: an offline-first presentation editor for PPTX and ODP files, powered by LibreOfficeKit and system media. Part of the Ely Office suite.",
     "homepage": "https://github.com/ELY-Open-Source/ElyOffice",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v0.1.14/ElyShow-0.1.14-windows-x86_64-setup.exe",
-            "hash": "829e77627996f05ac9d96804059a3ebfc0bb670535d4f55b453cb1e6038023a8"
+            "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v0.1.15/ElyShow-0.1.15-windows-x86_64-setup.exe",
+            "hash": "b551c3787f58e74a663516488d86819d895fce3128629df30995c06714886c08"
         }
     },
     "installer": {
