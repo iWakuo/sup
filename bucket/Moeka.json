@@ -17,6 +17,8 @@
         ]
     ],
     "post_install": [
+        "New-Item -Path 'HKCU:\\Software\\Classes\\Applications\\Moeka.exe' -Force | Out-Null",
+        "Set-ItemProperty -Path 'HKCU:\\Software\\Classes\\Applications\\Moeka.exe' -Name 'FriendlyAppName' -Value 'Moeka' -Type String",
         "$persistLocal = Join-Path $persist_dir 'Local'",
         "$persistRoaming = Join-Path $persist_dir 'Roaming'",
         "$appDataLocal = Join-Path $env:LOCALAPPDATA 'moeka'",
@@ -42,7 +44,8 @@
         "$appDataLocal = Join-Path $env:LOCALAPPDATA 'moeka'",
         "$appDataRoaming = Join-Path $env:APPDATA 'moeka'",
         "if ((Test-Path $appDataLocal) -and ((Get-Item $appDataLocal).LinkType -eq 'Junction')) { Remove-Item -Path $appDataLocal -Force }",
-        "if ((Test-Path $appDataRoaming) -and ((Get-Item $appDataRoaming).LinkType -eq 'Junction')) { Remove-Item -Path $appDataRoaming -Force }"
+        "if ((Test-Path $appDataRoaming) -and ((Get-Item $appDataRoaming).LinkType -eq 'Junction')) { Remove-Item -Path $appDataRoaming -Force }",
+        "Remove-Item -Path 'HKCU:\\Software\\Classes\\Applications\\Moeka.exe' -Recurse -Force -ErrorAction SilentlyContinue"
     ],
     "checkver": {
         "github": "https://github.com/MoekaProject/community"
