@@ -1,9 +1,9 @@
 {
-    "version": "2.0.0",
+    "version": "4",
     "description": "Asteria (Danyria) - 32-bit Vulkan graphics enhancement, real-time telemetry, and AMD FidelityFX™ FSR 3 Frame Generation runtime for Left 4 Dead 2.",
     "homepage": "https://github.com/Anokianx/L4D2-Asteria-Graphics-Enhancement",
     "license": "Unknown",
-    "url": "https://github.com/Anokianx/L4D2-Asteria-Graphics-Enhancement/releases/download/L4D2-FSR-2.0.0/Danyria.exe",
+    "url": "https://github.com/Anokianx/L4D2-Asteria-Graphics-Enhancement/releases/download/L4D2-FSR-4/Danyria.exe",
     "hash": "",
     "bin": "Danyria.exe",
     "shortcuts": [
