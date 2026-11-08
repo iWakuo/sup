@@ -1,0 +1,52 @@
+{
+    "version": "0.4.1",
+    "description": "Windows screenshot, annotation, offline OCR, clipboard history, GIF and screen recording.",
+    "homepage": "https://github.com/jimmgreen/LumaShot",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/jimmgreen/LumaShot/releases/download/v0.4.1/LumaShot-Setup.exe",
+            "hash": "3c69f25722b419b9a90066086b26e0abb97cd2b690f07c0a4d0f870ca12c8583"
+        }
+    },
+    "innosetup": true,
+    "shortcuts": [
+        [
+            "LumaShot.exe",
+            "LumaShot"
+        ]
+    ],
+    "post_install": [
+        "New-Item -ItemType Directory -Path \"$persist_dir\" -Force | Out-Null",
+        "$target = \"$env:LOCALAPPDATA\\LumaShot\"",
+        "if (Test-Path $target) {",
+        "    $item = Get-Item $target -Force",
+        "    if (!($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {",
+        "        Get-ChildItem $target -Force | Move-Item -Destination $persist_dir -Force",
+        "        Remove-Item $target -Force -Recurse",
+        "    } else {",
+        "        Remove-Item $target -Force",
+        "    }",
+        "}",
+        "New-Item -ItemType Junction -Path $target -Target $persist_dir | Out-Null"
+    ],
+    "pre_uninstall": [
+        "if (Test-Path \"$env:LOCALAPPDATA\\LumaShot\") {",
+        "    $item = Get-Item \"$env:LOCALAPPDATA\\LumaShot\" -Force",
+        "    if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) {",
+        "        Remove-Item \"$env:LOCALAPPDATA\\LumaShot\" -Force",
+        "    }",
+        "}"
+    ],
+    "checkver": "github",
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/jimmgreen/LumaShot/releases/download/v$version/LumaShot-Setup.exe",
+                "hash": {
+                    "url": "https://github.com/jimmgreen/LumaShot/releases/download/v$version/SHA256SUMS.txt"
+                }
+            }
+        }
+    }
+}
