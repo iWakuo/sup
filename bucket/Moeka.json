@@ -1,0 +1,57 @@
+{
+    "version": "0.1.35",
+    "description": "Local priority, concise and smooth high-performance Markdown editing experience, UI and editor based on Rust + GPUI rendering, smooth follow-up.",
+    "homepage": "https://moeka.app/zh-cn/",
+    "license": "Freeware",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/MoekaProject/community/releases/download/v0.1.35/Moeka-windows-x86_64.zip",
+            "hash": ""
+        }
+    },
+    "bin": "Moeka.exe",
+    "shortcuts": [
+        [
+            "Moeka.exe",
+            "Moeka"
+        ]
+    ],
+    "post_install": [
+        "$persistLocal = Join-Path $persist_dir 'Local'",
+        "$persistRoaming = Join-Path $persist_dir 'Roaming'",
+        "$appDataLocal = Join-Path $env:LOCALAPPDATA 'moeka'",
+        "$appDataRoaming = Join-Path $env:APPDATA 'moeka'",
+        "if (!(Test-Path $persistLocal)) { New-Item -ItemType Directory -Path $persistLocal -Force | Out-Null }",
+        "if (!(Test-Path $persistRoaming)) { New-Item -ItemType Directory -Path $persistRoaming -Force | Out-Null }",
+        "if (Test-Path $appDataLocal) {",
+        "    if ((Get-Item $appDataLocal).LinkType -ne 'Junction') {",
+        "        Copy-Item -Path \"$appDataLocal\\*\" -Destination $persistLocal -Recurse -Force",
+        "        Remove-Item -Path $appDataLocal -Recurse -Force",
+        "    }",
+        "}",
+        "if (!(Test-Path $appDataLocal)) { New-Item -ItemType Junction -Path $appDataLocal -Target $persistLocal | Out-Null }",
+        "if (Test-Path $appDataRoaming) {",
+        "    if ((Get-Item $appDataRoaming).LinkType -ne 'Junction') {",
+        "        Copy-Item -Path \"$appDataRoaming\\*\" -Destination $persistRoaming -Recurse -Force",
+        "        Remove-Item -Path $appDataRoaming -Recurse -Force",
+        "    }",
+        "}",
+        "if (!(Test-Path $appDataRoaming)) { New-Item -ItemType Junction -Path $appDataRoaming -Target $persistRoaming | Out-Null }"
+    ],
+    "pre_uninstall": [
+        "$appDataLocal = Join-Path $env:LOCALAPPDATA 'moeka'",
+        "$appDataRoaming = Join-Path $env:APPDATA 'moeka'",
+        "if ((Test-Path $appDataLocal) -and ((Get-Item $appDataLocal).LinkType -eq 'Junction')) { Remove-Item -Path $appDataLocal -Force }",
+        "if ((Test-Path $appDataRoaming) -and ((Get-Item $appDataRoaming).LinkType -eq 'Junction')) { Remove-Item -Path $appDataRoaming -Force }"
+    ],
+    "checkver": {
+        "github": "https://github.com/MoekaProject/community"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/MoekaProject/community/releases/download/v$version/Moeka-windows-x86_64.zip"
+            }
+        }
+    }
+}
