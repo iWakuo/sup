@@ -21,8 +21,8 @@
         "Set-ItemProperty -Path 'HKCU:\\Software\\Classes\\Applications\\Moeka.exe' -Name 'FriendlyAppName' -Value 'Moeka' -Type String",
         "$persistLocal = Join-Path $persist_dir 'Local'",
         "$persistRoaming = Join-Path $persist_dir 'Roaming'",
-        "$appDataLocal = Join-Path $env:LOCALAPPDATA 'moeka'",
-        "$appDataRoaming = Join-Path $env:APPDATA 'moeka'",
+        "$appDataLocal = Join-Path $env:LOCALAPPDATA 'Moeka'",
+        "$appDataRoaming = Join-Path $env:APPDATA 'Moeka'",
         "if (!(Test-Path $persistLocal)) { New-Item -ItemType Directory -Path $persistLocal -Force | Out-Null }",
         "if (!(Test-Path $persistRoaming)) { New-Item -ItemType Directory -Path $persistRoaming -Force | Out-Null }",
         "if (Test-Path $appDataLocal) {",
@@ -41,8 +41,8 @@
         "if (!(Test-Path $appDataRoaming)) { New-Item -ItemType Junction -Path $appDataRoaming -Target $persistRoaming | Out-Null }"
     ],
     "pre_uninstall": [
-        "$appDataLocal = Join-Path $env:LOCALAPPDATA 'moeka'",
-        "$appDataRoaming = Join-Path $env:APPDATA 'moeka'",
+        "$appDataLocal = Join-Path $env:LOCALAPPDATA 'Moeka'",
+        "$appDataRoaming = Join-Path $env:APPDATA 'Moeka'",
         "if ((Test-Path $appDataLocal) -and ((Get-Item $appDataLocal).LinkType -eq 'Junction')) { Remove-Item -Path $appDataLocal -Force }",
         "if ((Test-Path $appDataRoaming) -and ((Get-Item $appDataRoaming).LinkType -eq 'Junction')) { Remove-Item -Path $appDataRoaming -Force }",
         "Remove-Item -Path 'HKCU:\\Software\\Classes\\Applications\\Moeka.exe' -Recurse -Force -ErrorAction SilentlyContinue"
