@@ -1,0 +1,39 @@
+{
+    "version": "2.0.0",
+    "description": "Asteria (Danyria) - 32-bit Vulkan graphics enhancement, real-time telemetry, and AMD FidelityFX™ FSR 3 Frame Generation runtime for Left 4 Dead 2.",
+    "homepage": "https://github.com/Anokianx/L4D2-Asteria-Graphics-Enhancement",
+    "license": "Unknown",
+    "url": "https://github.com/Anokianx/L4D2-Asteria-Graphics-Enhancement/releases/download/L4D2-FSR-2.0.0/Danyria.exe",
+    "hash": "",
+    "bin": "Danyria.exe",
+    "shortcuts": [
+        [
+            "Danyria.exe",
+            "Danyria"
+        ]
+    ],
+    "post_install": [
+        "$roamingDir = \"$env:APPDATA\\Danyria\"",
+        "$localDir = \"$env:LOCALAPPDATA\\Danyria\"",
+        "$persistRoaming = \"$persist_dir\\Roaming\"",
+        "$persistLocal = \"$persist_dir\\Local\"",
+        "if (!(Test-Path $persistRoaming)) { New-Item -ItemType Directory -Path $persistRoaming -Force | Out-Null }",
+        "if (!(Test-Path $persistLocal)) { New-Item -ItemType Directory -Path $persistLocal -Force | Out-Null }",
+        "if (Test-Path $roamingDir) { Remove-Item $roamingDir -Force -Recurse -ErrorAction SilentlyContinue }",
+        "if (Test-Path $localDir) { Remove-Item $localDir -Force -Recurse -ErrorAction SilentlyContinue }",
+        "cmd /c mklink /J \"$roamingDir\" \"$persistRoaming\"",
+        "cmd /c mklink /J \"$localDir\" \"$persistLocal\""
+    ],
+    "pre_uninstall": [
+        "$roamingDir = \"$env:APPDATA\\Danyria\"",
+        "$localDir = \"$env:LOCALAPPDATA\\Danyria\"",
+        "if (Test-Path $roamingDir) { Remove-Item $roamingDir -Force -Recurse -ErrorAction SilentlyContinue }",
+        "if (Test-Path $localDir) { Remove-Item $localDir -Force -Recurse -ErrorAction SilentlyContinue }"
+    ],
+    "checkver": {
+        "github": "https://github.com/Anokianx/L4D2-Asteria-Graphics-Enhancement"
+    },
+    "autoupdate": {
+        "url": "https://github.com/Anokianx/L4D2-Asteria-Graphics-Enhancement/releases/download/L4D2-FSR-$version/Danyria.exe"
+    }
+}
