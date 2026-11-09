@@ -1,12 +1,12 @@
 {
-    "version": "0.1.35",
+    "version": "0.1.37",
     "description": "Local priority, concise and smooth high-performance Markdown editing experience, UI and editor based on Rust + GPUI rendering, smooth follow-up.",
     "homepage": "https://moeka.app/zh-cn/",
     "license": "Freeware",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/MoekaProject/community/releases/download/v0.1.35/Moeka-windows-x86_64.zip",
-            "hash": ""
+            "url": "https://github.com/MoekaProject/community/releases/download/v0.1.37/Moeka-windows-x86_64.zip",
+            "hash": "e787d71e0ad0aa90cb773ede4c31c2cb0dc04b2f6ffe1b00a78dcbff181a921b"
         }
     },
     "bin": "Moeka.exe",
