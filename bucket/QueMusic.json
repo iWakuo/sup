@@ -58,7 +58,11 @@
         "        }",
         "    }",
         "    New-Item -ItemType Junction -Path $appDataDir -Target $targetDir | Out-Null",
-        "}"
+        "}",
+        "# 删除应用自动创建在开始菜单根目录的快捷方式，只保留 Scoop Apps 下的快捷方式",
+        "$startMenuPrograms = [Environment]::GetFolderPath('Programs')",
+        "$extraShortcut = Join-Path $startMenuPrograms 'QueMusic.lnk'",
+        "if (Test-Path $extraShortcut) { Remove-Item $extraShortcut -Force -ErrorAction SilentlyContinue }"
     ],
     "uninstaller": {
         "script": [
@@ -78,7 +82,11 @@
             "            if ($existingTarget -ieq $targetDir) { cmd /c rmdir \"$appDataDir\" }",
             "        }",
             "    }",
-            "}"
+            "}",
+            "# 清理应用可能残留的开始菜单根目录快捷方式",
+            "$startMenuPrograms = [Environment]::GetFolderPath('Programs')",
+            "$extraShortcut = Join-Path $startMenuPrograms 'QueMusic.lnk'",
+            "if (Test-Path $extraShortcut) { Remove-Item $extraShortcut -Force -ErrorAction SilentlyContinue }"
         ]
     },
     "checkver": {
