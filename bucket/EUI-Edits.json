@@ -1,0 +1,55 @@
+{
+    "version": "0.2.4",
+    "description": "原生 Windows 记事本，支持实时 Markdown 编辑。",
+    "homepage": "https://github.com/fclx512/EUI-Edits",
+    "license": "Unknown",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/fclx512/EUI-Edits/releases/download/neoeditor-v0.2.4/EUI-Edits-0.2.4-windows-x64.exe",
+            "hash": ""
+        }
+    },
+    "bin": "EUI-Edits-0.2.4-windows-x64.exe",
+    "shortcuts": [
+        [ "EUI-Edits-0.2.4-windows-x64.exe", "EUI-Edits" ]
+    ],
+    "post_install": [
+        "# 目标数据目录（用户级 AppData）",
+        "$target = \"$env:APPDATA\\EUI-Edits\"",
+        "# Scoop 持久化目录",
+        "$persist = \"$persist_dir\"",
+        "",
+        "# 如果目标位置已经是一个联接，先移除（应对 scoop update --force 重跑）",
+        "if ((Get-Item $target -ErrorAction SilentlyContinue).LinkType -eq 'Junction') {",
+        "    Remove-Item $target -Force -Recurse",
+        "}",
+        "",
+        "# 如果 persist 目录尚未建立，先创建它",
+        "if (!(Test-Path $persist)) {",
+        "    New-Item -ItemType Directory -Path $persist -Force | Out-Null",
+        "}",
+        "",
+        "# 首次安装：把已有数据迁移到 persist，再把原目录清掉",
+        "if ((Test-Path $target) -and !(Get-Item $target).LinkType) {",
+        "    Copy-Item -Path \"$target\\*\" -Destination $persist -Recurse -Force",
+        "    Remove-Item $target -Recurse -Force",
+        "}",
+        "",
+        "# 创建目录联接：EUI-Edits 读写 AppData\\EUI-Edits 时，实际落在 persist 中",
+        "New-Item -ItemType Junction -Path $target -Target $persist | Out-Null"
+    ],
+    "post_uninstall": [
+        "Remove-Item -Path \"$env:APPDATA\\EUI-Edits\" -Force -Recurse -ErrorAction SilentlyContinue"
+    ],
+    "checkver": {
+        "github": "https://github.com/fclx512/EUI-Edits",
+        "regex": "neoeditor-v([\\d.]+)"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/fclx512/EUI-Edits/releases/download/neoeditor-v$version/EUI-Edits-$version-windows-x64.exe"
+            }
+        }
+    }
+}
