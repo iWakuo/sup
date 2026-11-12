@@ -1,0 +1,44 @@
+{
+    "version": "0.1.1",
+    "description": "Folia 歌词可视化音乐播放器的纯原生 Rust 重写。沿用原版的界面与动画设计，换掉 Electron，换上 GPU 直绘。",
+    "homepage": "https://github.com/Techuouo520/Folia-rust",
+    "license": "AGPL-3.0-only",
+    "url": "https://github.com/Techuouo520/Folia-rust/releases/download/v0.1.1/folia-v0.1.1-windows-x64.zip",
+    "hash": "7734e87f2e4911ae4d0379a15709e2a4e3c6a546eb5154d1feb54ee3967a0e81",
+    "extract_dir": "folia-v0.1.1-windows-x64",
+    "bin": "folia.exe",
+    "shortcuts": [["folia.exe", "Folia"]],
+    "post_install": [
+        "$persistRoot = Join-Path $env:SCOOP 'persist\\Folia-rust'",
+        "$localTarget = Join-Path $env:LOCALAPPDATA 'Folia-rust'",
+        "$roamingTarget = Join-Path $env:APPDATA 'Folia-rust'",
+        "",
+        "# 如果原位置已有真实数据，先移到 persist 目录再创建链接",
+        "if ((Test-Path $localTarget) -and -not (Get-Item $localTarget).LinkType) {",
+        "    New-Item -ItemType Directory -Path $persistRoot -Force | Out-Null",
+        "    Move-Item $localTarget (Join-Path $persistRoot 'Local') -Force",
+        "}",
+        "if ((Test-Path $roamingTarget) -and -not (Get-Item $roamingTarget).LinkType) {",
+        "    New-Item -ItemType Directory -Path $persistRoot -Force | Out-Null",
+        "    Move-Item $roamingTarget (Join-Path $persistRoot 'Roaming') -Force",
+        "}",
+        "",
+        "if (-not (Test-Path $localTarget)) {",
+        "    New-Item -ItemType Directory -Path (Join-Path $persistRoot 'Local') -Force | Out-Null",
+        "    New-Item -ItemType Junction -Path $localTarget -Target (Join-Path $persistRoot 'Local') -Force | Out-Null",
+        "}",
+        "if (-not (Test-Path $roamingTarget)) {",
+        "    New-Item -ItemType Directory -Path (Join-Path $persistRoot 'Roaming') -Force | Out-Null",
+        "    New-Item -ItemType Junction -Path $roamingTarget -Target (Join-Path $persistRoot 'Roaming') -Force | Out-Null",
+        "}"
+    ],
+    "checkver": "github",
+    "autoupdate": {
+        "url": "https://github.com/Techuouo520/Folia-rust/releases/download/v$version/folia-v$version-windows-x64.zip",
+        "extract_dir": "folia-v$version-windows-x64",
+        "hash": {
+            "url": "$url",
+            "mode": "download"
+        }
+    }
+}
