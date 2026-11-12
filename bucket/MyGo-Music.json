@@ -1,0 +1,86 @@
+{
+    "version": "0.1.24",
+    "description": "A native desktop music player built with Go.",
+    "homepage": "https://github.com/egoist/mygo-music",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/egoist/mygo-music/releases/download/v0.1.24/mygo-music-setup-0.1.24-amd64.exe",
+            "hash": "01083190d22724498bd5bfe1458e3ff8975ce214c649f5a86516b7f57fa69d31"
+        },
+        "arm64": {
+            "url": "https://github.com/egoist/mygo-music/releases/download/v0.1.24/mygo-music-setup-0.1.24-arm64.exe",
+            "hash": "d6384b830fcc3ee064cc8e59b9421e58293db336c21976e946e7c40ed3f50e5d"
+        }
+    },
+    "installer": {
+        "script": [
+            "Expand-7zipArchive -Path \"$dir\\$fname\" -DestinationPath $dir",
+            "Remove-Item \"$dir\\$fname\" -Force -ErrorAction SilentlyContinue",
+            "Remove-Item (Join-Path $dir '$PLUGINSDIR') -Recurse -Force -ErrorAction SilentlyContinue",
+            "Remove-Item (Join-Path $dir 'Uninstall.exe') -Force -ErrorAction SilentlyContinue"
+        ]
+    },
+    "post_install": [
+        "$localAppData = Join-Path $env:LOCALAPPDATA 'MyGo Music'",
+        "$roamingAppData = Join-Path $env:APPDATA 'MyGo Music'",
+        "$persistLocal = Join-Path $persist_dir 'Local'",
+        "$persistRoaming = Join-Path $persist_dir 'Roaming'",
+        "New-Item -ItemType Directory -Path $persist_dir -Force | Out-Null",
+        "if ((Test-Path $localAppData) -and -not (Get-Item $localAppData -Force).LinkType) {",
+        "    if (Test-Path $persistLocal) {",
+        "        Get-ChildItem -Path $localAppData -Force | Move-Item -Destination $persistLocal -Force -ErrorAction SilentlyContinue",
+        "        Remove-Item $localAppData -Recurse -Force -ErrorAction SilentlyContinue",
+        "    } else {",
+        "        Move-Item -Path $localAppData -Destination $persistLocal -Force",
+        "    }",
+        "}",
+        "if ((Test-Path $roamingAppData) -and -not (Get-Item $roamingAppData -Force).LinkType) {",
+        "    if (Test-Path $persistRoaming) {",
+        "        Get-ChildItem -Path $roamingAppData -Force | Move-Item -Destination $persistRoaming -Force -ErrorAction SilentlyContinue",
+        "        Remove-Item $roamingAppData -Recurse -Force -ErrorAction SilentlyContinue",
+        "    } else {",
+        "        Move-Item -Path $roamingAppData -Destination $persistRoaming -Force",
+        "    }",
+        "}",
+        "New-Item -ItemType Directory -Path $persistLocal -Force | Out-Null",
+        "New-Item -ItemType Directory -Path $persistRoaming -Force | Out-Null",
+        "if (-not (Test-Path $localAppData)) { New-Item -ItemType Junction -Path $localAppData -Target $persistLocal | Out-Null }",
+        "if (-not (Test-Path $roamingAppData)) { New-Item -ItemType Junction -Path $roamingAppData -Target $persistRoaming | Out-Null }"
+    ],
+    "uninstaller": {
+        "script": [
+            "$localAppData = Join-Path $env:LOCALAPPDATA 'MyGo Music'",
+            "$roamingAppData = Join-Path $env:APPDATA 'MyGo Music'",
+            "if ((Test-Path $localAppData) -and (Get-Item $localAppData -Force).LinkType) { [System.IO.Directory]::Delete($localAppData, $false) }",
+            "if ((Test-Path $roamingAppData) -and (Get-Item $roamingAppData -Force).LinkType) { [System.IO.Directory]::Delete($roamingAppData, $false) }"
+        ]
+    },
+    "bin": [
+        [
+            "MyGo Music.exe",
+            "mygo-music"
+        ]
+    ],
+    "shortcuts": [
+        [
+            "MyGo Music.exe",
+            "MyGo Music"
+        ]
+    ],
+    "checkver": "github",
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/egoist/mygo-music/releases/download/v$version/mygo-music-setup-$version-amd64.exe"
+            },
+            "arm64": {
+                "url": "https://github.com/egoist/mygo-music/releases/download/v$version/mygo-music-setup-$version-arm64.exe"
+            }
+        },
+        "hash": {
+            "url": "$baseurl/SHA256SUMS",
+            "regex": "$sha256\\s+$basename"
+        }
+    }
+}
