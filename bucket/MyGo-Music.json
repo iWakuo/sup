@@ -46,14 +46,36 @@
         "New-Item -ItemType Directory -Path $persistLocal -Force | Out-Null",
         "New-Item -ItemType Directory -Path $persistRoaming -Force | Out-Null",
         "if (-not (Test-Path $localAppData)) { New-Item -ItemType Junction -Path $localAppData -Target $persistLocal | Out-Null }",
-        "if (-not (Test-Path $roamingAppData)) { New-Item -ItemType Junction -Path $roamingAppData -Target $persistRoaming | Out-Null }"
+        "if (-not (Test-Path $roamingAppData)) { New-Item -ItemType Junction -Path $roamingAppData -Target $persistRoaming | Out-Null }",
+        "$protocolKey = 'HKCU:\\Software\\Classes\\mygo-music'",
+        "if (-not (Test-Path $protocolKey)) {",
+        "    New-Item -Path $protocolKey -Force | Out-Null",
+        "    Set-ItemProperty -Path $protocolKey -Name '(Default)' -Value 'URL:mygo-music Protocol' -Force",
+        "    Set-ItemProperty -Path $protocolKey -Name 'URL Protocol' -Value '' -Force",
+        "    $commandKey = Join-Path $protocolKey 'shell\\open\\command'",
+        "    New-Item -Path $commandKey -Force | Out-Null",
+        "    $exePath = Join-Path $dir 'MyGo Music.exe'",
+        "    $q = [char]34",
+        "    $cmdValue = ($q + $exePath + $q + ' \"%1\"')",
+        "    Set-ItemProperty -Path $commandKey -Name '(Default)' -Value $cmdValue -Force",
+        "}"
     ],
     "uninstaller": {
         "script": [
             "$localAppData = Join-Path $env:LOCALAPPDATA 'MyGo Music'",
             "$roamingAppData = Join-Path $env:APPDATA 'MyGo Music'",
             "if ((Test-Path $localAppData) -and (Get-Item $localAppData -Force).LinkType) { [System.IO.Directory]::Delete($localAppData, $false) }",
-            "if ((Test-Path $roamingAppData) -and (Get-Item $roamingAppData -Force).LinkType) { [System.IO.Directory]::Delete($roamingAppData, $false) }"
+            "if ((Test-Path $roamingAppData) -and (Get-Item $roamingAppData -Force).LinkType) { [System.IO.Directory]::Delete($roamingAppData, $false) }",
+            "$protocolKey = 'HKCU:\\Software\\Classes\\mygo-music'",
+            "if (Test-Path $protocolKey) {",
+            "    $commandKey = Join-Path $protocolKey 'shell\\open\\command'",
+            "    if (Test-Path $commandKey) {",
+            "        $registeredPath = (Get-ItemProperty -Path $commandKey -Name '(Default)' -ErrorAction SilentlyContinue).'(default)'",
+            "        if ($registeredPath -and $registeredPath -like \"*$dir*\") {",
+            "            Remove-Item -Path $protocolKey -Recurse -Force -ErrorAction SilentlyContinue",
+            "        }",
+            "    }",
+            "}"
         ]
     },
     "bin": [
