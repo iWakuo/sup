@@ -1,13 +1,18 @@
 {
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Folia 歌词可视化音乐播放器的纯原生 Rust 重写。沿用原版的界面与动画设计，换掉 Electron，换上 GPU 直绘。",
     "homepage": "https://github.com/Techuouo520/Folia-rust",
     "license": "AGPL-3.0-only",
-    "url": "https://github.com/Techuouo520/Folia-rust/releases/download/v0.1.1/folia-v0.1.1-windows-x64.zip",
-    "hash": "7734e87f2e4911ae4d0379a15709e2a4e3c6a546eb5154d1feb54ee3967a0e81",
-    "extract_dir": "folia-v0.1.1-windows-x64",
+    "url": "https://github.com/Techuouo520/Folia-rust/releases/download/v0.1.2/folia-v0.1.2-windows-x64.zip",
+    "hash": "08a71ba5eac8c7b5bada99059a478a06c31e6deea60c1a422a2c986d76767d78",
+    "extract_dir": "folia-v0.1.2-windows-x64",
     "bin": "folia.exe",
-    "shortcuts": [["folia.exe", "Folia"]],
+    "shortcuts": [
+        [
+            "folia.exe",
+            "Folia"
+        ]
+    ],
     "post_install": [
         "$persistRoot = Join-Path $env:SCOOP 'persist\\Folia-rust'",
         "$localTarget = Join-Path $env:LOCALAPPDATA 'Folia-rust'",
