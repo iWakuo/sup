@@ -1,12 +1,12 @@
 {
-    "version": "0.1.15",
+    "version": "0.1.16",
     "description": "ElyMark: an offline-first Markdown editor with math and diagram support, part of the Ely Office suite.",
     "homepage": "https://github.com/ELY-Open-Source/ElyOffice",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v0.1.15/ElyMark-0.1.15-windows-x86_64-setup.exe",
-            "hash": "8e840c6dd4076eb6a10500379bf5a89b7817453608611aac37ee21ba73aab72e"
+            "url": "https://github.com/ELY-Open-Source/ElyOffice/releases/download/v0.1.16/ElyMark-0.1.16-windows-x86_64-setup.exe",
+            "hash": "40a4a9c3a8ecfc530659eedcb8235560eafd4c3c229c33c2aa4c7821e65a345a"
         }
     },
     "installer": {
