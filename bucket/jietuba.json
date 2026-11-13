@@ -1,0 +1,51 @@
+{
+    "version": "2.2.2",
+    "description": "截图吧 PP —— 基于 PP-OCRv6 的截图与 OCR 工具",
+    "homepage": "https://github.com/1003129155/jietuba",
+    "license": "Unknown",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/1003129155/jietuba/releases/download/release-2.2.2/jietuba_pp-release-2.2.2-x64.zip",
+            "hash": "08b82b86ae88c6ec3f6330e71a2bc525a62b933917683af0d0e7d2c7fbd9958f"
+        },
+        "arm64": {
+            "url": "https://github.com/1003129155/jietuba/releases/download/release-2.2.2/jietuba_pp-release-2.2.2-arm64.zip",
+            "hash": "224f9577fa3002b94daefddc814ca37529e25a7c23251ae92e69d1b8aab428af"
+        }
+    },
+    "bin": "jietuba_pp.exe",
+    "shortcuts": [
+        [
+            "jietuba_pp.exe",
+            "截图吧"
+        ]
+    ],
+    "post_install": [
+        "$links = @(@{Link=(Join-Path $env:APPDATA 'Jietuba'); Target=(Join-Path $persist_dir 'Roaming')}, @{Link=(Join-Path $env:LOCALAPPDATA 'Jietuba'); Target=(Join-Path $persist_dir 'Local')}); foreach ($l in $links) { New-Item -ItemType Directory -Path $l.Target -Force | Out-Null; if (Test-Path $l.Link) { $item = Get-Item $l.Link -Force; if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { continue }; Move-Item -Path (Join-Path $l.Link '*') -Destination $l.Target -Force -ErrorAction SilentlyContinue; Remove-Item -Path $l.Link -Recurse -Force }; New-Item -ItemType Junction -Path $l.Link -Target $l.Target | Out-Null }"
+    ],
+    "pre_uninstall": [
+        "$links = @((Join-Path $env:APPDATA 'Jietuba'), (Join-Path $env:LOCALAPPDATA 'Jietuba')); foreach ($l in $links) { if (Test-Path $l) { $item = Get-Item $l -Force; if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { [System.IO.Directory]::Delete($l, $false) } } }"
+    ],
+    "checkver": {
+        "github": "https://github.com/1003129155/jietuba",
+        "regex": "release-([0-9.]+)"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/1003129155/jietuba/releases/download/release-$version/jietuba_pp-release-$version-x64.zip",
+                "hash": {
+                    "url": "https://github.com/1003129155/jietuba/releases/download/release-$version/SHA256SUMS.txt",
+                    "regex": "([a-f0-9]{64})\\s+jietuba_pp-release-$version-x64\\.zip"
+                }
+            },
+            "arm64": {
+                "url": "https://github.com/1003129155/jietuba/releases/download/release-$version/jietuba_pp-release-$version-arm64.zip",
+                "hash": {
+                    "url": "https://github.com/1003129155/jietuba/releases/download/release-$version/SHA256SUMS.txt",
+                    "regex": "([a-f0-9]{64})\\s+jietuba_pp-release-$version-arm64\\.zip"
+                }
+            }
+        }
+    }
+}
