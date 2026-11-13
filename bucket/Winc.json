@@ -1,0 +1,30 @@
+{
+    "version": "0.1.626",
+    "description": "A lightweight, Rust-native code editor with built-in Git and Markdown preview.",
+    "homepage": "https://github.com/DEEIX-AI/Winc",
+    "license": "Apache-2.0",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/DEEIX-AI/Winc/releases/download/v0.1.626/Winc-0.1.626-windows-x64.msi",
+            "hash": "16a349788f728f6fd438639a0e6fc77e5374eac1ea50ae3fa72fae7c0609329f"
+        }
+    },
+    "pre_install": [
+        "if (Test-Path \"$dir\\winc\\winc.exe\") { Get-ChildItem -Path \"$dir\\winc\" -Force | Move-Item -Destination $dir -Force; Remove-Item -Path \"$dir\\winc\" -Recurse -Force -ErrorAction SilentlyContinue }",
+        "if (Test-Path \"$dir\\WincExe\") { Rename-Item -Path \"$dir\\WincExe\" -NewName \"winc.exe\" -Force }",
+        "if (!(Test-Path \"$dir\\data\")) { New-Item -ItemType Directory -Path \"$dir\\data\" -Force | Out-Null }",
+        "if (!(Test-Path \"$dir\\winc.exe\")) { Write-Error \"扁平化失败：$dir\\winc.exe 不存在\" }"
+    ],
+    "bin": "winc.exe",
+    "shortcuts": [["winc.exe", "Winc"]],
+    "persist": "data",
+    "checkver": "github",
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/DEEIX-AI/Winc/releases/download/v$version/Winc-$version-windows-x64.msi",
+                "hash": { "url": "$baseurl/SHA256SUMS" }
+            }
+        }
+    }
+}
