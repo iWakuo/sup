@@ -15,6 +15,14 @@
         "if (!(Test-Path \"$dir\\data\")) { New-Item -ItemType Directory -Path \"$dir\\data\" -Force | Out-Null }",
         "if (!(Test-Path \"$dir\\winc.exe\")) { Write-Error \"扁平化失败：$dir\\winc.exe 不存在\" }"
     ],
+    "post_install": [
+        "$appKey = 'HKCU:\\Software\\Classes\\Applications\\winc.exe'",
+        "New-Item -Path $appKey -Force | Out-Null",
+        "Set-ItemProperty -Path $appKey -Name 'FriendlyAppName' -Value 'Winc' -Type String -Force"
+    ],
+    "pre_uninstall": [
+        "Remove-Item -Path 'HKCU:\\Software\\Classes\\Applications\\winc.exe' -Recurse -Force -ErrorAction SilentlyContinue"
+    ],
     "bin": "winc.exe",
     "shortcuts": [["winc.exe", "Winc"]],
     "persist": "data",
