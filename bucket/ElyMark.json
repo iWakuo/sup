@@ -84,7 +84,7 @@
         "$shellNew = \"$extKey\\ShellNew\"",
         "$currentProgId = (Get-Item -Path $extKey -ErrorAction SilentlyContinue).GetValue('')",
         "if ($currentProgId -eq $progId) {",
-        "    Remove-Item -Path $extKey -Force -ErrorAction SilentlyContinue",
+        "    Remove-Item -Path $extKey -Recurse -Force -Confirm:$false -ErrorAction SilentlyContinue",
         "    Remove-Item -Path \"HKCU:\\Software\\Classes\\$progId\" -Recurse -Force -ErrorAction SilentlyContinue",
         "} else {",
         "    if (Test-Path $shellNew) { Remove-ItemProperty -Path $shellNew -Name 'NullFile' -Force -ErrorAction SilentlyContinue }",
