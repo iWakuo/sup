@@ -1,12 +1,12 @@
 {
-    "version": "0.1.626",
+    "version": "0.1.688",
     "description": "A lightweight, Rust-native code editor with built-in Git and Markdown preview.",
     "homepage": "https://github.com/DEEIX-AI/Winc",
     "license": "Apache-2.0",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/DEEIX-AI/Winc/releases/download/v0.1.626/Winc-0.1.626-windows-x64.msi",
-            "hash": "16a349788f728f6fd438639a0e6fc77e5374eac1ea50ae3fa72fae7c0609329f"
+            "url": "https://github.com/DEEIX-AI/Winc/releases/download/v0.1.688/Winc-0.1.688-windows-x64.msi",
+            "hash": "a22b574d3e450da61c17bc99d6700b66b94063f8f6b74cc6f7f3b5f6006b4971"
         }
     },
     "pre_install": [
@@ -20,18 +20,23 @@
         "New-Item -Path $appKey -Force | Out-Null",
         "Set-ItemProperty -Path $appKey -Name 'FriendlyAppName' -Value 'Winc' -Type String -Force"
     ],
-    "pre_uninstall": [
-        "Remove-Item -Path 'HKCU:\\Software\\Classes\\Applications\\winc.exe' -Recurse -Force -ErrorAction SilentlyContinue"
-    ],
+    "pre_uninstall": "Remove-Item -Path 'HKCU:\\Software\\Classes\\Applications\\winc.exe' -Recurse -Force -ErrorAction SilentlyContinue",
     "bin": "winc.exe",
-    "shortcuts": [["winc.exe", "Winc"]],
+    "shortcuts": [
+        [
+            "winc.exe",
+            "Winc"
+        ]
+    ],
     "persist": "data",
     "checkver": "github",
     "autoupdate": {
         "architecture": {
             "64bit": {
                 "url": "https://github.com/DEEIX-AI/Winc/releases/download/v$version/Winc-$version-windows-x64.msi",
-                "hash": { "url": "$baseurl/SHA256SUMS" }
+                "hash": {
+                    "url": "$baseurl/SHA256SUMS"
+                }
             }
         }
     }
