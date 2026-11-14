@@ -1,0 +1,38 @@
+{
+    "$schema": "https://raw.githubusercontent.com/ScoopInstaller/Scoop/master/schema.json",
+    "version": "5.12.0",
+    "description": "The fastest copy/backup software on Windows.",
+    "homepage": "https://fastcopy.jp",
+    "license": {
+        "identifier": "Freeware",
+        "url": "https://fastcopy.jp/help/fastcopy_eng.htm#license"
+    },
+    "url": "https://raw.githubusercontent.com/FastCopyLab/FastCopyDist2/main/FastCopy5.12.0_installer.exe",
+    "hash": "14ccc9d2ebbdfbcbcf0c6e4004773d12bb98de197a572959473a2d9d3b000e3d",
+    "pre_install": [
+        "Invoke-ExternalCommand \"$dir\\$fname\" \"/EXTRACT$($architecture.Substring(0, 2))\" | Out-Null",
+        "\"$(if ($architecture -eq '64bit') { '_x64' } else { '' })\" | ForEach-Object {",
+        "  Get-ChildItem \"$dir\\FastCopy$version$_\\*\" -Recurse | Move-Item -Destination $dir",
+        "  Remove-Item @(",
+        "    \"$dir\\$fname\"",
+        "    \"$dir\\FastCopy$version$_\"",
+        "    \"$dir\\msix\"",
+        "    \"$dir\\setup.exe\"",
+        "  ) -Recurse -Force -ErrorAction SilentlyContinue",
+        "}",
+        "if (!(Test-Path \"$persist_dir\\FastCopy2.ini\")) {",
+        "  Set-Content -Encoding Ascii -Path \"$dir\\FastCopy2.ini\" -Value '[main]'",
+        "}"
+    ],
+    "shortcuts": [
+        [
+            "FastCopy.exe",
+            "FastCopy"
+        ]
+    ],
+    "persist": "FastCopy2.ini",
+    "checkver": "FastCopy ver ([\\d.]+)",
+    "autoupdate": {
+        "url": "https://raw.githubusercontent.com/FastCopyLab/FastCopyDist2/main/FastCopy$version_installer.exe"
+    }
+}
