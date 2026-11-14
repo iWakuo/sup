@@ -1,0 +1,33 @@
+{
+    "version": "1.2.1",
+    "description": "轻量低延迟的截贴图、长截图、动图录制、离线 OCR 与翻译工具。（全插件版，解压即全功能，已内置 RapidOCR 文字识别、离线中英翻译、RapidLaTeXOCR 公式识别、GIF 录制扩展，无需再下载任何插件包。）",
+    "homepage": "https://github.com/duyuanfu/evan-ocr",
+    "license": "Freeware",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/duyuanfu/evan-ocr/releases/download/v1.2.1/evan-v1.2.1-windows-x64-full.zip",
+            "hash": ""
+        }
+    },
+    "bin": "evan.exe",
+    "shortcuts": [
+        [
+            "evan.exe",
+            "Evan",
+            "",
+            "resources\\app.ico"
+        ]
+    ],
+    "persist": [
+        "config",
+        "logs"
+    ],
+    "checkver": "github",
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/duyuanfu/evan-ocr/releases/download/v$version/evan-v$version-windows-x64-full.zip"
+            }
+        }
+    }
+}
