@@ -1,16 +1,16 @@
 {
-    "version": "0.1.24",
+    "version": "0.1.25",
     "description": "A native desktop music player built with Go.",
     "homepage": "https://github.com/egoist/mygo-music",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/egoist/mygo-music/releases/download/v0.1.24/mygo-music-setup-0.1.24-amd64.exe",
-            "hash": "01083190d22724498bd5bfe1458e3ff8975ce214c649f5a86516b7f57fa69d31"
+            "url": "https://github.com/egoist/mygo-music/releases/download/v0.1.25/mygo-music-setup-0.1.25-amd64.exe",
+            "hash": "6128d72d3783b41a9360e32f6332fb473d9ad2c385382fd95bce29a227ae82f1"
         },
         "arm64": {
-            "url": "https://github.com/egoist/mygo-music/releases/download/v0.1.24/mygo-music-setup-0.1.24-arm64.exe",
-            "hash": "d6384b830fcc3ee064cc8e59b9421e58293db336c21976e946e7c40ed3f50e5d"
+            "url": "https://github.com/egoist/mygo-music/releases/download/v0.1.25/mygo-music-setup-0.1.25-arm64.exe",
+            "hash": "39ab7d68203639631f8668a5141ce963cd9870afda2eda007415af013c3a6873"
         }
     },
     "installer": {
