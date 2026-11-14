@@ -1,0 +1,56 @@
+{
+    "version": "2026.10.26.135552",
+    "description": "Scoop 的国际化解决方案(语言包)，提升不同语言的用户使用 Scoop 时的体验 | An internationalization tool (language pack) for Scoop helps users of different languages use Scoop more easily",
+    "homepage": "https://scoop-i18n.abgox.com",
+    "license": {
+        "identifier": "MIT"
+    },
+    "url": "https://github.com/abgox/scoop-i18n/archive/dc7007365a5cbe2096614600c41f1cfce4785761.zip",
+    "hash": "fb24b738331d85b33adb3a1d0fd95aa9fb7524da9faadab7c2a9cdcfb8a61d9f",
+    "extract_dir": "scoop-i18n-dc7007365a5cbe2096614600c41f1cfce4785761",
+    "extract_to": "app",
+    "pre_install": [
+        "if (!$bucket) { $bucket = 'abyss' }",
+        ". $bucketsdir\\$bucket\\util\\_.ps1",
+        "A-Start-Install",
+        "A-Ensure-Directory \"$dir\\app\\original\"",
+        "A-Ensure-Directory \"$dir\\app\\shims\"",
+        "Get-ChildItem \"$bucketsdir\\$bucket\\extra\\$app\" | ForEach-Object {",
+        "    Copy-Item \"$scoopdir\\shims\\$($_.Name)\" \"$dir\\app\\original\" -Force",
+        "    $content = Get-Content $_.FullName -Raw",
+        "    $content = $content.Replace('${scoop.ps1}', \"$scoopdir\\apps\\scoop\\current\\bin\\scoop.ps1\")",
+        "    $content = $content.Replace('${scoop-i18n.ps1}', \"$scoopdir\\apps\\$app\\current\\app\\scoop-i18n.ps1\")",
+        "    [System.IO.File]::WriteAllText(\"$dir\\app\\shims\\$($_.Name)\", ($content -join [System.Environment]::NewLine), [System.Text.UTF8Encoding]::new($false))",
+        "}",
+        "Get-ChildItem \"$dir\\app\\shims\" | ForEach-Object {",
+        "    Copy-Item $_.FullName \"$scoopdir\\shims\" -Force",
+        "}"
+    ],
+    "post_install": [
+        "if (!$bucket) { $bucket = 'abyss' }",
+        ". $bucketsdir\\$bucket\\util\\_.ps1",
+        "A-Complete-Install"
+    ],
+    "pre_uninstall": [
+        "if (!$bucket) { $bucket = 'abyss' }",
+        ". $bucketsdir\\$bucket\\util\\_.ps1",
+        "A-Start-Uninstall",
+        "Get-ChildItem \"$dir\\app\\original\" | ForEach-Object {",
+        "    Move-Item $_.FullName \"$scoopdir\\shims\" -Force",
+        "}"
+    ],
+    "post_uninstall": [
+        "if (!$bucket) { $bucket = 'abyss' }",
+        ". $bucketsdir\\$bucket\\util\\_.ps1",
+        "A-Complete-Uninstall"
+    ],
+    "checkver": {
+        "commit": {
+            "format": "date"
+        }
+    },
+    "autoupdate": {
+        "url": "https://github.com/abgox/scoop-i18n/archive/$matchSha.zip",
+        "extract_dir": "scoop-i18n-$matchSha"
+    }
+}
