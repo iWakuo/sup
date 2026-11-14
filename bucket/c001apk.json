@@ -1,0 +1,52 @@
+{
+    "version": "1.5.2",
+    "description": "c001apk - Flutter 编写的 Coolapk 第三方客户端",
+    "homepage": "https://github.com/TG-Twilight/c001apk",
+    "license": "Unknown",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/TG-Twilight/c001apk/releases/download/1.5.2-release/c001apk-1.5.2+20261108-windows-x86_64.zip",
+            "hash": "22eb0c9c10d6a2de15a7e31502082bac5cbd6b9e934f3e926ed1e6adf2d7401f"
+        }
+    },
+    "bin": "c001apk.exe",
+    "shortcuts": [
+        ["c001apk.exe", "c001apk"]
+    ],
+    "post_install": [
+        "$target = Join-Path $env:APPDATA 'bggRGjQaUbCoE'",
+        "$persist = $persist_dir",
+        "if ((Get-Item -LiteralPath $target -ErrorAction SilentlyContinue).LinkType -eq 'Junction') {",
+        "    (Get-Item -LiteralPath $target -Force).Delete()",
+        "}",
+        "if (-not (Test-Path -LiteralPath $persist)) {",
+        "    New-Item -ItemType Directory -Path $persist -Force | Out-Null",
+        "}",
+        "if ((Test-Path -LiteralPath $target) -and -not (Get-Item -LiteralPath $target -Force).LinkType) {",
+        "    Copy-Item -Path (Join-Path $target '*') -Destination $persist -Recurse -Force",
+        "    Remove-Item -LiteralPath $target -Recurse -Force",
+        "}",
+        "New-Item -ItemType Junction -Path $target -Target $persist | Out-Null"
+    ],
+    "post_uninstall": [
+        "$target = Join-Path $env:APPDATA 'bggRGjQaUbCoE'",
+        "if ((Get-Item -LiteralPath $target -ErrorAction SilentlyContinue).LinkType -eq 'Junction') {",
+        "    (Get-Item -LiteralPath $target -Force).Delete()",
+        "}"
+    ],
+    "checkver": {
+        "github": "https://github.com/TG-Twilight/c001apk",
+        "regex": "([\\d.]+)-release"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/TG-Twilight/c001apk/releases/download/$version-release/c001apk-$version+20261108-windows-x86_64.zip"
+            }
+        },
+        "hash": {
+            "url": "https://github.com/TG-Twilight/c001apk/releases/download/$version-release/SHA256SUMS.txt",
+            "regex": "([a-f0-9]{64})\\s+c001apk-$version\\+20261108-windows-x86_64\\.zip"
+        }
+    }
+}
