@@ -1,0 +1,35 @@
+{
+    "version": "1.11.0",
+    "description": "LiteView 轻量看图：Rust 编写，离线、秒开，支持 GIF/APNG/WebP 逐帧查看与画图级编辑。",
+    "homepage": "https://github.com/Lianzy-Baimiao/LiteView",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/Lianzy-Baimiao/LiteView/releases/download/v1.11.0/LiteView-v1.11.0-windows-x64.zip",
+            "hash": "19862e6cee990541e5f9d0980638af27ed47d273dde471761f0cfdec52db5ecc"
+        }
+    },
+    "extract_dir": "LiteView-v1.11.0-windows-x64",
+    "bin": "LiteView.exe",
+    "shortcuts": [
+        [
+            "LiteView.exe",
+            "LiteView"
+        ]
+    ],
+    "persist": "config",
+    "checkver": {
+        "github": "https://github.com/Lianzy-Baimiao/LiteView"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/Lianzy-Baimiao/LiteView/releases/download/v$version/LiteView-v$version-windows-x64.zip",
+                "hash": {
+                    "url": "https://github.com/Lianzy-Baimiao/LiteView/releases/download/v$version/SHA256SUMS.txt",
+                    "regex": "([a-fA-F0-9]{64})\\s+LiteView-v$version-windows-x64\\.zip"
+                }
+            }
+        }
+    }
+}
