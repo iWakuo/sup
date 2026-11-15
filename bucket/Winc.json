@@ -1,12 +1,12 @@
 {
-    "version": "0.1.688",
+    "version": "0.1.733",
     "description": "A lightweight, Rust-native code editor with built-in Git and Markdown preview.",
     "homepage": "https://github.com/DEEIX-AI/Winc",
     "license": "Apache-2.0",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/DEEIX-AI/Winc/releases/download/v0.1.688/Winc-0.1.688-windows-x64.msi",
-            "hash": "a22b574d3e450da61c17bc99d6700b66b94063f8f6b74cc6f7f3b5f6006b4971"
+            "url": "https://github.com/DEEIX-AI/Winc/releases/download/v0.1.733/Winc-0.1.733-windows-x64.msi",
+            "hash": "1c62242e4ecff5d5c3fe9b6f7225e7bc7f283e18ebb12993dba11f88970959d8"
         }
     },
     "pre_install": [
