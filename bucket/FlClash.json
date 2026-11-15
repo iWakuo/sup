@@ -1,0 +1,78 @@
+{
+    "version": "0.9.3",
+    "description": "A multi-platform proxy client based on ClashMeta.",
+    "homepage": "https://github.com/chen08209/FlClash",
+    "license": "GPL-3.0",
+    "url": "https://github.com/chen08209/FlClash/releases/download/v0.9.3/FlClash-0.9.3-windows-amd64.zip",
+    "hash": "e3c3c839784c50bbe406f2946f4f52147d418b3c28842ae8eb40404929490216",
+    "extract_dir": "",
+    "bin": [
+        "FlClash.exe",
+        "FlClashCore.exe"
+    ],
+    "shortcuts": [
+        [
+            "FlClash.exe",
+            "FlClash"
+        ]
+    ],
+    "persist": [
+        "data",
+        "FlClashCore.exe"
+    ],
+    "pre_install": [
+        "$externalDirs = @(",
+        "    @{ Target = \"$env:APPDATA\\com.follow\"; Link = \"$persist_dir\\AppData_Roaming_com.follow\" },",
+        "    @{ Target = \"$env:LOCALAPPDATA\\com.follow\"; Link = \"$persist_dir\\AppData_Local_com.follow\" }",
+        ")",
+        "foreach ($dir in $externalDirs) {",
+        "    if (!(Test-Path -LiteralPath $dir.Link)) {",
+        "        New-Item -Path $dir.Link -ItemType Directory -Force | Out-Null",
+        "    }",
+        "    if (!(Test-Path -LiteralPath $dir.Target)) {",
+        "        New-Item -Path $dir.Target -ItemType Directory -Force | Out-Null",
+        "    }",
+        "}"
+    ],
+    "post_install": [
+        "$externalDirs = @(",
+        "    @{ Target = \"$env:APPDATA\\com.follow\"; Link = \"$persist_dir\\AppData_Roaming_com.follow\" },",
+        "    @{ Target = \"$env:LOCALAPPDATA\\com.follow\"; Link = \"$persist_dir\\AppData_Local_com.follow\" }",
+        ")",
+        "foreach ($dir in $externalDirs) {",
+        "    if (Test-Path -LiteralPath $dir.Target) {",
+        "        $targetItem = Get-Item -LiteralPath $dir.Target -Force",
+        "        if ($targetItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint) {",
+        "            cmd /c rmdir \"$($dir.Target)\" 2>$null",
+        "        } else {",
+        "            Remove-Item -LiteralPath $dir.Target -Recurse -Force -ErrorAction SilentlyContinue",
+        "        }",
+        "    }",
+        "    cmd /c mklink /J \"$($dir.Target)\" \"$($dir.Link)\" | Out-Null",
+        "}"
+    ],
+    "uninstaller": {
+        "script": [
+            "$externalDirs = @(",
+            "    \"$env:APPDATA\\com.follow\",",
+            "    \"$env:LOCALAPPDATA\\com.follow\"",
+            ")",
+            "foreach ($dir in $externalDirs) {",
+            "    if (Test-Path -LiteralPath $dir) {",
+            "        $item = Get-Item -LiteralPath $dir -Force",
+            "        if ($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) {",
+            "            cmd /c rmdir \"$dir\" 2>$null",
+            "        }",
+            "    }",
+            "}"
+        ]
+    },
+    "checkver": "github",
+    "autoupdate": {
+        "url": "https://github.com/chen08209/FlClash/releases/download/v$version/FlClash-$version-windows-amd64.zip",
+        "hash": {
+            "url": "https://github.com/chen08209/FlClash/releases/download/v$version/SHA256SUMS",
+            "regex": "([a-f0-9]{64})\\s+./FlClash-$version-windows-amd64.zip"
+        }
+    }
+}
