@@ -1,0 +1,30 @@
+{
+    "version": "0.8.0",
+    "description": "Windows 原生截图、标注与贴图工具，集成长截屏、屏幕录制、离线 OCR、二维码识别与翻译。",
+    "homepage": "https://citepix.com/",
+    "license": "Proprietary",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/mosheng1/CitePix-feedback/releases/download/v0.8.0/CitePix-0.8.0-x64.zip",
+            "hash": ""
+        }
+    },
+    "bin": "CitePix.exe",
+    "shortcuts": [
+        [
+            "CitePix.exe",
+            "CitePix"
+        ]
+    ],
+    "persist": "CitePixData",
+    "checkver": {
+        "github": "mosheng1/CitePix-feedback"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/mosheng1/CitePix-feedback/releases/download/v$version/CitePix-$version-x64.zip"
+            }
+        }
+    }
+}
