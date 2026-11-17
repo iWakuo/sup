@@ -1,0 +1,50 @@
+{
+    "version": "0.5.2",
+    "description": "永远不卡的 Windows 文件管理器。GPU 渲染，用 Rust 写成，只有一个小小的 exe。",
+    "homepage": "https://github.com/Koimsurai/Arke",
+    "license": "Unknown",
+    "url": "https://github.com/Koimsurai/Arke/releases/download/v0.5.2/arke-0.5.2.exe#/arke.exe",
+    "hash": "53d0ff841bcc99d28a57bab5c61dc76ffae7b7c4877f6c7ebd7ad87389777ada",
+    "bin": "arke.exe",
+    "shortcuts": [
+        [
+            "arke.exe",
+            "Arke"
+        ]
+    ],
+    "persist": [
+        "Local",
+        "Roaming"
+    ],
+    "post_install": [
+        "$links = @(",
+        "    @{Link=\"$env:LOCALAPPDATA\\Arke\"; Target=\"$persist_dir\\Local\"},",
+        "    @{Link=\"$env:APPDATA\\Arke\"; Target=\"$persist_dir\\Roaming\"}",
+        ")",
+        "foreach ($l in $links) {",
+        "    if (!(Test-Path $l.Target)) { New-Item -Path $l.Target -ItemType Directory -Force | Out-Null }",
+        "    if ((Test-Path $l.Link) -and -not ((Get-Item $l.Link).LinkType)) {",
+        "        Write-Host \"Backing up existing data from $($l.Link)...\"",
+        "        Copy-Item -Path $l.Link -Destination $l.Target -Recurse -Force",
+        "        Remove-Item -Path $l.Link -Recurse -Force",
+        "    }",
+        "    if (!(Test-Path $l.Link)) {",
+        "        New-Item -Path $l.Link -ItemType Junction -Value $l.Target -Force | Out-Null",
+        "        Write-Host \"Linked $($l.Link) -> $($l.Target)\"",
+        "    }",
+        "}"
+    ],
+    "pre_uninstall": [
+        "$links = @(\"$env:LOCALAPPDATA\\Arke\", \"$env:APPDATA\\Arke\")",
+        "foreach ($l in $links) {",
+        "    if ((Test-Path $l) -and ((Get-Item $l).LinkType -eq 'Junction')) { Remove-Item -Path $l -Force }",
+        "}"
+    ],
+    "checkver": "github",
+    "autoupdate": {
+        "url": "https://github.com/Koimsurai/Arke/releases/download/v$version/arke-$version.exe#/arke.exe",
+        "hash": {
+            "url": "https://github.com/Koimsurai/Arke/releases/download/v$version/arke-$version.exe.sha256"
+        }
+    }
+}
