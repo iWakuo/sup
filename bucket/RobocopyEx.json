@@ -1,0 +1,37 @@
+{
+    "version": "1.2.8.0",
+    "description": "A GUI wrapper for Windows' built-in robocopy, formerly known as FastCopy.",
+    "homepage": "https://github.com/HO-COOH/FastCopy",
+    "license": "MIT",
+    "url": "https://github.com/HO-COOH/FastCopy/releases/download/v1.2.8.0/HO-COOH.RoboCopyEx_1.2.8.0_x64__nb41n5ze32q3e.msix",
+    "hash": "",
+    "architecture": {
+        "64bit": {
+            "pre_install": [
+                "Get-ChildItem \"$dir\\*.msix\" | ForEach-Object { Expand-7zipArchive $_ $dir }",
+                "Remove-Item \"$dir\\AppxSignature.p7x\" -Force -ErrorAction SilentlyContinue | Out-Null"
+            ]
+        }
+    },
+    "installer": {
+        "script": [
+            ". \"$bucketsdir\\$bucket\\bin\\utils.ps1\"",
+            "Import-AppxPSModule",
+            "Add-AppxPackage -Path \"$dir\\AppxManifest.xml\" -Register"
+        ]
+    },
+    "uninstaller": {
+        "script": [
+            "Import-AppxPSModule",
+            "Get-AppxPackage -Name \"HO-COOH.RoboCopyEx\" | Remove-AppxPackage -PreserveApplicationData"
+        ]
+    },
+    "checkver": {
+        "url": "https://api.github.com/repos/HO-COOH/FastCopy/releases/latest",
+        "jsonpath": "$.tag_name",
+        "regex": "v([\\d.]+)"
+    },
+    "autoupdate": {
+        "url": "https://github.com/HO-COOH/FastCopy/releases/download/v$version/HO-COOH.RoboCopyEx_$version_x64__nb41n5ze32q3e.msix"
+    }
+}
