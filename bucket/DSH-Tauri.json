@@ -8,7 +8,7 @@
         "Local: %LOCALAPPDATA%\\dsh-tauri -> $persist_dir\\Local",
         "deepseek-harness: %LOCALAPPDATA%\\deepseek-harness -> $persist_dir\\deepseek-harness",
         "DSH_HOME -> $persist_dir\\.dsh-tauri",
-        "PATH includes $persist_dir\\deepseek-harness\\bin"
+        "PATH: $env:LOCALAPPDATA\\deepseek-harness\\bin is appended to the User PATH by the installer at runtime (real path, no hardcoded username)"
     ],
     "architecture": {
         "64bit": {
@@ -53,7 +53,16 @@
             "    }",
             "}",
             "if (-not (Test-Path $appDSH)) { New-Item -ItemType Junction -Path $appDSH -Target $persistDSH | Out-Null }",
-            "if (-not (Test-Path \"$appDSH\\bin\")) { New-Item -ItemType Directory -Path \"$appDSH\\bin\" -Force | Out-Null }"
+            "if (-not (Test-Path \"$appDSH\\bin\")) { New-Item -ItemType Directory -Path \"$appDSH\\bin\" -Force | Out-Null }",
+            "# Append the LOCALAPPDATA bin dir to the User PATH at runtime (real path, username not hardcoded)",
+            "$dshBin = Join-Path $env:LOCALAPPDATA 'deepseek-harness\\bin'",
+            "$userPath = [Environment]::GetEnvironmentVariable('Path', 'User')",
+            "if ($null -eq $userPath) { $userPath = '' }",
+            "$entries = $userPath -split ';'",
+            "if ($entries -notcontains $dshBin) {",
+            "    $newPath = ($userPath.TrimEnd(';') + ';' + $dshBin).TrimStart(';')",
+            "    [Environment]::SetEnvironmentVariable('Path', $newPath, 'User')",
+            "}"
         ]
     },
     "uninstaller": {
@@ -72,6 +81,13 @@
             "if (Test-Path $appDSH) {",
             "    $item = Get-Item $appDSH -Force",
             "    if ($item.LinkType -eq 'Junction') { Remove-Item -Path $appDSH -Force }",
+            "}",
+            "# Remove the LOCALAPPDATA bin entry from the User PATH",
+            "$dshBin = Join-Path $env:LOCALAPPDATA 'deepseek-harness\\bin'",
+            "$userPath = [Environment]::GetEnvironmentVariable('Path', 'User')",
+            "if ($userPath) {",
+            "    $newPath = (($userPath -split ';' | Where-Object { $_ -and ($_ -ne $dshBin) }) -join ';')",
+            "    [Environment]::SetEnvironmentVariable('Path', $newPath, 'User')",
             "}"
         ]
     },
@@ -86,7 +102,6 @@
     "env_set": {
         "DSH_HOME": "$persist_dir\\.dsh-tauri"
     },
-    "env_add_path": "%LOCALAPPDATA%\\deepseek-harness\\bin",
     "persist": [
         ".dsh-tauri",
         "Roaming",
