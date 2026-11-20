@@ -1,0 +1,111 @@
+{
+    "version": "0.31.7",
+    "description": "DeepSeek Harness Desktop (Tauri community build) by dsh-tauri",
+    "homepage": "https://github.com/dsh-tauri/deepseek-harness-desktop",
+    "license": "Freeware",
+    "notes": [
+        "Roaming: %APPDATA%\\dsh-tauri -> $persist_dir\\Roaming",
+        "Local: %LOCALAPPDATA%\\dsh-tauri -> $persist_dir\\Local",
+        "deepseek-harness: %LOCALAPPDATA%\\deepseek-harness -> $persist_dir\\deepseek-harness",
+        "DSH_HOME -> $persist_dir\\.dsh-tauri",
+        "PATH includes $persist_dir\\deepseek-harness\\bin"
+    ],
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/dsh-tauri/deepseek-harness-desktop/releases/download/v0.31.7/Deepseek.Harness.Desktop_0.31.7_x64-setup.exe",
+            "hash": "051EFE3B64E0F94C8410BD965131D3D2D724887E1080A9AE51691936ED4EB1B0"
+        }
+    },
+    "installer": {
+        "script": [
+            "Expand-7zipArchive -Path \"$dir\\$fname\" -DestinationPath $dir -Removal -Switches '-xr!$PLUGINSDIR -xr!uninstall.exe'",
+            "$persistRoaming = \"$persist_dir\\Roaming\"",
+            "$persistLocal = \"$persist_dir\\Local\"",
+            "if (-not (Test-Path $persistRoaming)) { New-Item -ItemType Directory -Path $persistRoaming -Force | Out-Null }",
+            "if (-not (Test-Path $persistLocal)) { New-Item -ItemType Directory -Path $persistLocal -Force | Out-Null }",
+            "$appRoaming = Join-Path $env:APPDATA 'dsh-tauri'",
+            "$appLocal = Join-Path $env:LOCALAPPDATA 'dsh-tauri'",
+            "if (Test-Path $appRoaming) {",
+            "    $item = Get-Item $appRoaming -Force",
+            "    if ($item.LinkType -ne 'Junction') {",
+            "        Get-ChildItem -Path $appRoaming -Force | ForEach-Object { Copy-Item -Path $_.FullName -Destination $persistRoaming -Recurse -Force }",
+            "        Remove-Item -Path $appRoaming -Recurse -Force",
+            "    }",
+            "}",
+            "if (Test-Path $appLocal) {",
+            "    $item = Get-Item $appLocal -Force",
+            "    if ($item.LinkType -ne 'Junction') {",
+            "        Get-ChildItem -Path $appLocal -Force | ForEach-Object { Copy-Item -Path $_.FullName -Destination $persistLocal -Recurse -Force }",
+            "        Remove-Item -Path $appLocal -Recurse -Force",
+            "    }",
+            "}",
+            "if (-not (Test-Path $appRoaming)) { New-Item -ItemType Junction -Path $appRoaming -Target $persistRoaming | Out-Null }",
+            "if (-not (Test-Path $appLocal)) { New-Item -ItemType Junction -Path $appLocal -Target $persistLocal | Out-Null }",
+            "$persistDSH = \"$persist_dir\\deepseek-harness\"",
+            "if (-not (Test-Path $persistDSH)) { New-Item -ItemType Directory -Path $persistDSH -Force | Out-Null }",
+            "if (-not (Test-Path \"$persistDSH\\bin\")) { New-Item -ItemType Directory -Path \"$persistDSH\\bin\" -Force | Out-Null }",
+            "$appDSH = Join-Path $env:LOCALAPPDATA 'deepseek-harness'",
+            "if (Test-Path $appDSH) {",
+            "    $item = Get-Item $appDSH -Force",
+            "    if ($item.LinkType -ne 'Junction') {",
+            "        Get-ChildItem -Path $appDSH -Force | ForEach-Object { Copy-Item -Path $_.FullName -Destination $persistDSH -Recurse -Force }",
+            "        Remove-Item -Path $appDSH -Recurse -Force",
+            "    }",
+            "}",
+            "if (-not (Test-Path $appDSH)) { New-Item -ItemType Junction -Path $appDSH -Target $persistDSH | Out-Null }",
+            "if (-not (Test-Path \"$appDSH\\bin\")) { New-Item -ItemType Directory -Path \"$appDSH\\bin\" -Force | Out-Null }"
+        ]
+    },
+    "uninstaller": {
+        "script": [
+            "$appRoaming = Join-Path $env:APPDATA 'dsh-tauri'",
+            "$appLocal = Join-Path $env:LOCALAPPDATA 'dsh-tauri'",
+            "$appDSH = Join-Path $env:LOCALAPPDATA 'deepseek-harness'",
+            "if (Test-Path $appRoaming) {",
+            "    $item = Get-Item $appRoaming -Force",
+            "    if ($item.LinkType -eq 'Junction') { Remove-Item -Path $appRoaming -Force }",
+            "}",
+            "if (Test-Path $appLocal) {",
+            "    $item = Get-Item $appLocal -Force",
+            "    if ($item.LinkType -eq 'Junction') { Remove-Item -Path $appLocal -Force }",
+            "}",
+            "if (Test-Path $appDSH) {",
+            "    $item = Get-Item $appDSH -Force",
+            "    if ($item.LinkType -eq 'Junction') { Remove-Item -Path $appDSH -Force }",
+            "}"
+        ]
+    },
+    "bin": "deepseek-harness-desktop.exe",
+    "shortcuts": [
+        [
+            "deepseek-harness-desktop.exe",
+            "DSH-Tauri",
+            "icons\\32x32.png"
+        ]
+    ],
+    "env_set": {
+        "DSH_HOME": "$persist_dir\\.dsh-tauri"
+    },
+    "env_add_path": "$persist_dir\\deepseek-harness\\bin",
+    "persist": [
+        ".dsh-tauri",
+        "Roaming",
+        "Local",
+        "deepseek-harness"
+    ],
+    "checkver": {
+        "github": "https://github.com/dsh-tauri/deepseek-harness-desktop",
+        "regex": "v([\\d.]+)"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/dsh-tauri/deepseek-harness-desktop/releases/download/v$version/Deepseek.Harness.Desktop_$version_x64-setup.exe",
+                "hash": {
+                    "url": "$url",
+                    "mode": "extract"
+                }
+            }
+        }
+    }
+}
