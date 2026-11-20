@@ -1,5 +1,5 @@
 {
-    "version": "0.7.2-Beta",
+    "version": "0.8.0-Beta",
     "description": "基于 Qt QML 的高性能跨平台开源音乐播放器",
     "homepage": "https://github.com/BroNekoX/QueMusic",
     "license": "Apache-2.0",
@@ -10,18 +10,19 @@
     ],
     "architecture": {
         "64bit": {
-            "url": "https://github.com/BroNekoX/QueMusic/releases/download/v0.7.2-Beta/QueMusic-Windows.zip",
-            "hash": "",
+            "url": "https://github.com/BroNekoX/QueMusic/releases/download/v0.8.0-Beta/QueMusic-Windows.zip",
+            "hash": "483c15d552b6c4d826f8cf93f1a8e743f5490056503539f87c53c7fa4d391ee7",
             "extract_dir": "QueMusic1"
         }
     },
     "bin": "QueMusic.exe",
     "shortcuts": [
-        ["QueMusic.exe", "QueMusic"]
+        [
+            "QueMusic.exe",
+            "QueMusic"
+        ]
     ],
-    "persist": [
-        "Account.ini"
-    ],
+    "persist": "Account.ini",
     "post_install": [
         "$persistRoot = [System.IO.Path]::GetFullPath($persist_dir)",
         "if (!(Test-Path $persistRoot)) { New-Item -ItemType Directory -Path $persistRoot -Force | Out-Null }",
