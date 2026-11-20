@@ -1,5 +1,5 @@
 {
-    "version": "0.31.7",
+    "version": "0.32.0",
     "description": "DeepSeek Harness Desktop (Tauri community build) by dsh-tauri",
     "homepage": "https://github.com/dsh-tauri/deepseek-harness-desktop",
     "license": "Freeware",
@@ -12,8 +12,8 @@
     ],
     "architecture": {
         "64bit": {
-            "url": "https://github.com/dsh-tauri/deepseek-harness-desktop/releases/download/v0.31.7/Deepseek.Harness.Desktop_0.31.7_x64-setup.exe",
-            "hash": "051EFE3B64E0F94C8410BD965131D3D2D724887E1080A9AE51691936ED4EB1B0"
+            "url": "https://github.com/dsh-tauri/deepseek-harness-desktop/releases/download/v0.32.0/Deepseek.Harness.Desktop_0.32.0_x64-setup.exe",
+            "hash": "c4ed1393b05494489b26bd1a26d2cbf08a3f11d5a8c323802bd93ac266064107"
         }
     },
     "installer": {
