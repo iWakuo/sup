@@ -86,7 +86,7 @@
     "env_set": {
         "DSH_HOME": "$persist_dir\\.dsh-tauri"
     },
-    "env_add_path": "$persist_dir\\deepseek-harness\\bin",
+    "env_add_path": "%LOCALAPPDATA%\\deepseek-harness\\bin",
     "persist": [
         ".dsh-tauri",
         "Roaming",
