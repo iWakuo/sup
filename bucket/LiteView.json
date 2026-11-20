@@ -9,7 +9,7 @@
             "hash": "869ade2eb2707529f93f21b5c0d9308c5e6fc0a6d89ae3af718bdf3ef45f2a07"
         }
     },
-    "extract_dir": "LiteView-v1.11.0-windows-x64",
+    "extract_dir": "LiteView-v$version-windows-x64",
     "bin": "LiteView.exe",
     "shortcuts": [
         [
