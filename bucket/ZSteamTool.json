@@ -1,9 +1,9 @@
 {
-    "version": "1.2.1",
+    "version": "1.2.2",
     "description": "Steam 解锁工具内核（OpenSteamTool 定制发行版），用于解锁并下载未入库的游戏/DLC。",
     "homepage": "https://github.com/hazjy/ZSteamTool",
     "license": "GPL-3.0",
-    "url": "https://github.com/hazjy/ZSteamTool/releases/download/v1.2.1/ZSteamTool-v1.2.1.zip",
+    "url": "https://github.com/hazjy/ZSteamTool/releases/download/v1.2.2/ZSteamTool-v1.2.2.zip",
     "post_install": [
         "$ErrorActionPreference = 'Continue'",
         "$steamPath = $null",
