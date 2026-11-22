@@ -23,7 +23,7 @@
         "  New-ItemProperty -LiteralPath Registry::HKEY_CLASSES_ROOT\\.sh -Name \"(Default)\" -Value \"sh_auto_file\" -PropertyType String -Force",
         "  New-ItemProperty -LiteralPath Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\sh_auto_file\\shell\\open\\command -Name '(default)' -Value '\"C:\\Program Files\\Git\\bin\\bash.exe\" \"%1\" %*' -PropertyType String -Force"
     ],
-    "depends": "sdoog/argc-completions",
+    "depends": "sup/argc-completions",
     "license": "Apache-2.0|MIT",
     "architecture": {
         "arm64": {
