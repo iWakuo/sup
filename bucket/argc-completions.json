@@ -10,7 +10,7 @@
         "yq"
     ],
     "suggest": {
-        "argc": "sdoog/argc"
+        "argc": "sup/argc"
     },
     "env_set": {
         "ARGC_COMPLETIONS_ROOT": "$dir",
