@@ -6,6 +6,7 @@
         "identifier": "GPL-3.0-only",
         "url": "https://github.com/hiddify/hiddify-app/blob/main/LICENSE.md"
     },
+    "notes": "Data is persisted in the 'hiddify_portable_data' directory inside the app folder.",
     "architecture": {
         "64bit": {
             "url": "https://github.com/hiddify/hiddify-app/releases/download/v5.9.15/Hiddify-Windows-Portable-x64.zip",
@@ -13,7 +14,12 @@
         }
     },
     "extract_dir": "Hiddify",
-    "bin": "HiddifyCli.exe",
+    "bin": [
+        [
+            "HiddifyCore.exe",
+            "HiddifyCore"
+        ]
+    ],
     "shortcuts": [
         [
             "Hiddify.exe",
@@ -23,7 +29,7 @@
     "persist": "hiddify_portable_data",
     "checkver": {
         "url": "https://api.github.com/repos/hiddify/hiddify-app/releases",
-        "jsonpath": "$.[0].tag_name",
+        "jsonpath": "$[0].tag_name",
         "regex": "([\\d.]+)"
     },
     "autoupdate": {
