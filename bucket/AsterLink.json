@@ -1,17 +1,20 @@
 {
-    "version": "2.2.0+220",
+    "version": "2.3.5+235",
     "description": "文析助手（AsterLink），聚合 17 家网盘与 GitHub 文件源的 Android/Windows 解析与管理工具。",
     "homepage": "https://github.com/z7786/wenxi",
     "license": "AGPL-3.0",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/z7786/wenxi/releases/download/v2.2.0%2B220/asterlink-2.2.0%2B220-windows-x64-setup.exe",
-            "hash": "3b587ee27f8a3c1a77091ec0baa297718ae3a371e5691f11cce34ad4d39f323b"
+            "url": "https://github.com/z7786/wenxi/releases/download/v2.3.5+235/asterlink-2.3.5+235-windows-x64-setup.exe",
+            "hash": "3dbe83e60711153e2461ec026c6909c82a7264d08f132775290de6e1fa8229f7"
         }
     },
     "innosetup": true,
     "shortcuts": [
-        ["AsterLink.exe", "AsterLink"]
+        [
+            "AsterLink.exe",
+            "AsterLink"
+        ]
     ],
     "pre_install": [
         "$target = $persist_dir",
@@ -33,8 +36,9 @@
         "if ((Test-Path $link) -and ((Get-Item $link -Force).LinkType -eq 'Junction')) { Remove-Item $link -Force }"
     ],
     "checkver": {
-        "github": "https://github.com/z7786/wenxi",
-        "regex": "/releases/tag/v([^\\s]+)"
+        "url": "https://api.github.com/repos/z7786/wenxi/releases",
+        "jsonpath": "$[0].tag_name",
+        "regex": "v?([\\d.]+(?:\\+\\d+)?)"
     },
     "autoupdate": {
         "architecture": {
@@ -44,7 +48,8 @@
         },
         "hash": {
             "url": "https://github.com/z7786/wenxi/releases/download/v$version/SHA256SUMS.txt",
-            "regex": "$basename\\s+$sha256"
+            "find": "$basename",
+            "regex": "([a-fA-F0-9]{64})"
         }
     }
 }
