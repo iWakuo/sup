@@ -33,7 +33,8 @@
         "if ((Test-Path $link) -and ((Get-Item $link -Force).LinkType -eq 'Junction')) { Remove-Item $link -Force }"
     ],
     "checkver": {
-        "github": "https://github.com/z7786/wenxi"
+    "github": "https://github.com/z7786/wenxi",
+    "regex": "/releases/tag/v([^\\s]+)"
     },
     "autoupdate": {
         "architecture": {
