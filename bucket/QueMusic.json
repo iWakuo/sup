@@ -1,5 +1,5 @@
 {
-    "version": "0.8.0-Beta",
+    "version": "0.8.1-Beta",
     "description": "基于 Qt QML 的高性能跨平台开源音乐播放器",
     "homepage": "https://github.com/BroNekoX/QueMusic",
     "license": "Apache-2.0",
@@ -10,8 +10,8 @@
     ],
     "architecture": {
         "64bit": {
-            "url": "https://github.com/BroNekoX/QueMusic/releases/download/v0.8.0-Beta/QueMusic-Windows.zip",
-            "hash": "483c15d552b6c4d826f8cf93f1a8e743f5490056503539f87c53c7fa4d391ee7",
+            "url": "https://github.com/BroNekoX/QueMusic/releases/download/v0.8.1-Beta/QueMusic-Windows.zip",
+            "hash": "bb6272e63dc580c38e44a91e12f9a58bf78924aeab53cc7f1ac8df174586b129",
             "extract_dir": "QueMusic1"
         }
     },
