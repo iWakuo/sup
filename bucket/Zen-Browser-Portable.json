@@ -1,12 +1,12 @@
 {
-    "version": "1.23.4b",
+    "version": "1.24.3b",
     "description": "Zen Browser 便携版，基于 Firefox，数据随目录携带，不写注册表。",
     "homepage": "https://github.com/Piracola/Zen-Portable",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/Piracola/Zen-Portable/releases/download/1.23.4b/Zen_1.23.4b.7z",
-            "hash": "1387eadcb7bc9203b402f2d3c9119b110f977eea20dcb0512a3fb02a59dfa492"
+            "url": "https://github.com/Piracola/Zen-Portable/releases/download/1.24.3b/Zen_1.24.3b.7z",
+            "hash": "98a7358a771a90276adf269436e2ddeb2dc540662ca1ae82e19102c663a88049"
         }
     },
     "bin": [
@@ -20,7 +20,8 @@
         "Cache"
     ],
     "checkver": {
-        "github": "https://github.com/Piracola/Zen-Portable"
+        "github": "https://github.com/Piracola/Zen-Portable",
+        "regex": "tag/([\\d.]+[a-z]?)"
     },
     "autoupdate": {
         "architecture": {
