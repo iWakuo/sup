@@ -1,16 +1,16 @@
 {
-    "version": "2.2.3",
+    "version": "2.2.4",
     "description": "截图吧 PP —— 基于 PP-OCRv6 的截图与 OCR 工具",
     "homepage": "https://github.com/1003129155/jietuba",
     "license": "Unknown",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/1003129155/jietuba/releases/download/release-2.2.3/jietuba_pp-release-2.2.3-x64.zip",
-            "hash": "9bb56524979a3580c8c84a48336f5091351e18d84fb6129dd1419b072b6e1c2a"
+            "url": "https://github.com/1003129155/jietuba/releases/download/release-2.2.4/jietuba_pp-release-2.2.4-x64.zip",
+            "hash": "abd5e877407890499daefe860c84829fb310a1bf40175368aade49ff63d692af"
         },
         "arm64": {
-            "url": "https://github.com/1003129155/jietuba/releases/download/release-2.2.3/jietuba_pp-release-2.2.3-arm64.zip",
-            "hash": "11b39f9113de411d774f854a33f9032a2eb84d259a379476f192097959ee4b34"
+            "url": "https://github.com/1003129155/jietuba/releases/download/release-2.2.4/jietuba_pp-release-2.2.4-arm64.zip",
+            "hash": "1f9f61e64d6a9076df6f4b03f8806d3b0c0f71f30307a21a704b923806298018"
         }
     },
     "bin": "jietuba_pp.exe",
