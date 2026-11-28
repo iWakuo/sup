@@ -6,7 +6,7 @@
     "architecture": {
         "64bit": {
             "url": "https://github.com/z7786/wenxi/releases/download/v2.4.5+245/asterlink-2.4.5+245-windows-x64-setup.exe",
-            "hash": "59b79dc2d15ba3d23efa006a3b4f658498f6bb9f39c972a4986a78ccc91db955"
+            "hash": "7f08c4501b17f03b24cefd99ddccfda36c5bc314aa9b57fc2947de2ee4101110"
         }
     },
     "innosetup": true,
@@ -48,7 +48,7 @@
         },
         "hash": {
             "url": "https://github.com/z7786/wenxi/releases/download/v$version/SHA256SUMS.txt",
-            "find": "$basename",
+            "find": "windows-x64-setup",
             "regex": "([a-fA-F0-9]{64})"
         }
     }
